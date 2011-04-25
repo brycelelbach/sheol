@@ -9,6 +9,7 @@ project ;
 
 run heapless_pool/limits.cpp ;
 run heapless_pool/allocate_objects.cpp ;
+run heapless_pool/allocate_arrays.cpp ;
 run heapless_pool/invalid_count.cpp ;
 run heapless_pool/out_of_memory.cpp ;
 compile-fail heapless_pool/capacity_not_divisible_by_object_size.cpp ;
