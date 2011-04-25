@@ -1,0 +1,56 @@
+enum notrace_type { notrace };
+
+struct stack_trace {
+  typedef unspecified context_type;
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Container types
+  typedef unspecified value_type;
+  typedef unspecified iterator;
+  typedef unspecified const_iterator;
+  typedef unspecified reference;
+  typedef unspecified const_reference;
+  typedef unspecified pointer;
+  typedef std::ptrdiff_t difference_type;
+  typedef std::size_t size_type;
+
+  stack_trace (void);
+
+  stack_trace (notrace_type);
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Assignable
+  stack_trace (stack_trace const&);
+
+  stack_trace& operator= (stack_trace const&);
+
+  void swap (stack_trace&);
+
+  /////////////////////////////////////////////////////////////////////////////
+  // EqualityComparable
+  bool operator== (stack_trace const&) const;  
+  bool operator!= (stack_trace const&) const;
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Container
+  iterator begin (void);
+  const_iterator begin (void) const;
+  const_iterator cbegin (void) const;
+
+  iterator end (void);
+  const_iterator end (void) const;
+  const_iterator cend (void) const;
+
+  bool empty (void) const;
+
+  size_type size (void) const;
+
+  size_type max_size (void) const;
+
+  /////////////////////////////////////////////////////////////////////////////
+  void trace (void);
+
+  context_type& context (void);  
+  context_type const& context (void) const;  
+};
+ 
