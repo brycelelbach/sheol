@@ -15,7 +15,7 @@ use-project /boost : $(BOOST_ROOT) ;
 
 project 
   : requirements
-    <toolset>gcc:<cxxflags>-fvisibility=hidden
+    #<toolset>gcc:<cxxflags>-fvisibility=hidden
     <warnings>on
     <include>.
     <include>$(BOOST_ROOT)

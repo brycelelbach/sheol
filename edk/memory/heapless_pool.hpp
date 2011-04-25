@@ -71,7 +71,7 @@ struct heapless_pool {
  
     byte_type* new_next = next + (count * ObjectSize);
  
-    if (EDK_UNLIKELY(new_next >= end))
+    if (EDK_UNLIKELY(new_next > end))
       return reinterpret_cast<void*>(out_of_memory); 
  
     void* mem = reinterpret_cast<void*>(next);
@@ -81,12 +81,12 @@ struct heapless_pool {
 
   // Returns the number of objects that this pool has allocated.
   static size_type size (void) {
-    return reinterpret_cast<size_type>((next - buffer) / ObjectSize);
+    return static_cast<size_type>((next - buffer) / ObjectSize);
   }
 
   // Returns the number of objects that this pool can allocate. 
   static size_type remaining (void) {
-    return reinterpret_cast<size_type>((end - next) / ObjectSize);
+    return static_cast<size_type>((end - next) / ObjectSize);
   }
 
   // We don't want the buffer to go into the .bss section. It would be
