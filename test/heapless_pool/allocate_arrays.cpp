@@ -28,38 +28,48 @@ void test (void) {
 
   T scratch;
 
-  // Allocate storage for the pointers with new.
-  boost::scoped_array<T*> ptrs(new T*[pool::pool_size]);
+  const typename pool::size_type pool_size = pool::pool_size / 2;
 
-  for (typename pool::size_type i = 0; i < pool::pool_size; ++i) {
-    ptrs[i] = reinterpret_cast<T*>(pool::allocate());
+  // Allocate storage for the pointers with new.
+  boost::scoped_array<T*> ptrs(new T*[pool_size]);
+
+  for (typename pool::size_type i = 0; i < pool_size; ++i) {
+    ptrs[i] = reinterpret_cast<T*>(pool::allocate(2));
 
     BOOST_TEST(ptrs[i]);
     BOOST_TEST(ptrs[i] != reinterpret_cast<void*>(pool::invalid_count));
 
-    if (ptrs[i] && (ptrs[i] != reinterpret_cast<void*>(pool::invalid_count)))
-      *(ptrs[i]) = dist(rng);
-    else
+    if (ptrs[i] && (ptrs[i] != reinterpret_cast<void*>(pool::invalid_count))) {
+      (ptrs[i])[0] = dist(rng);
+      (ptrs[i])[1] = dist(rng);
+    }
+    else {
       // Call the rng even on a bad allocation, so that the next iteration
       // isn't screwed up because of this failure.
       scratch = dist(rng);
+      scratch = dist(rng);
+    }
   }
 
   // Reset the random number generate
   rng.seed();
 
   // Check for corruption 
-  for (typename pool::size_type i = 0; i < pool::pool_size; ++i) {
+  for (typename pool::size_type i = 0; i < pool_size; ++i) {
     BOOST_TEST(ptrs[i]);
     BOOST_TEST(ptrs[i] != reinterpret_cast<void*>(pool::invalid_count));
 
-    if (ptrs[i] && (ptrs[i] != reinterpret_cast<void*>(pool::invalid_count)))
+    if (ptrs[i] && (ptrs[i] != reinterpret_cast<void*>(pool::invalid_count))) {
       // We cast here to avoid problems with iostream interpreting uint8_t as a
       // character.
-      BOOST_TEST_EQ(boost::uint64_t(*(ptrs[i])), boost::uint64_t(dist(rng)));
-    else
+      BOOST_TEST_EQ(boost::uint64_t((ptrs[i])[0]), boost::uint64_t(dist(rng)));
+      BOOST_TEST_EQ(boost::uint64_t((ptrs[i])[1]), boost::uint64_t(dist(rng)));
+    }
+    else {
       // Call the rng anyways, so that the next iteration isn't screwed up. 
       scratch = dist(rng);
+      scratch = dist(rng);
+    }
   }
 }
 
