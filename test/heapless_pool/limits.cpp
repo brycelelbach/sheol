@@ -10,7 +10,6 @@
 #include <edk/memory/heapless_pool.hpp>
 
 using edk::memory::heapless_pool;
-using boost::report_errors;
 
 int main (void) {
   // On most x86 systems, the (smallest) page size is 4 kilobytes.
@@ -34,7 +33,17 @@ int main (void) {
   BOOST_TEST(word_pool::pool_size  == 0x800); 
   BOOST_TEST(dword_pool::pool_size == 0x400); 
   BOOST_TEST(qword_pool::pool_size == 0x200); 
+  
+  BOOST_TEST(byte_pool::size()  == 0); 
+  BOOST_TEST(word_pool::size()  == 0); 
+  BOOST_TEST(dword_pool::size() == 0); 
+  BOOST_TEST(qword_pool::size() == 0); 
+  
+  BOOST_TEST(byte_pool::remaining()  == 0x1000); 
+  BOOST_TEST(word_pool::remaining()  == 0x800); 
+  BOOST_TEST(dword_pool::remaining() == 0x400); 
+  BOOST_TEST(qword_pool::remaining() == 0x200); 
 
-  return report_errors();
+  return boost::report_errors();
 }
 
