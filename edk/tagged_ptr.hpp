@@ -9,7 +9,7 @@
 #if !defined(EDK_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599)
 #define EDK_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599
 
-#include <boost/detect.hpp>
+#include <boost/detect/architecture.hpp>
 
 #if defined(BOOST_DETECT_X86_64_ARCHITECTURE)
   #include <edk/config.hpp>
