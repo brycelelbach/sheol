@@ -7,6 +7,7 @@
 
 project ;
 
+run tagged_ptr.cpp ;
 run heapless_pool/limits.cpp ;
 run heapless_pool/allocate_objects.cpp ;
 run heapless_pool/allocate_arrays.cpp ;
