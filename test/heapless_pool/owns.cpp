@@ -20,8 +20,8 @@ int main (void) {
   typedef heapless_pool<8, 0x1000> qword_pool; 
 
   void* first_byte   = byte_pool::allocate(),
-        middle_bytes = byte_pool::allocate(byte_pool::pool_size - 2),
-        last_byte    = byte_pool::allocate();
+      * middle_bytes = byte_pool::allocate(byte_pool::pool_size - 2),
+      * last_byte    = byte_pool::allocate();
 
   // Make sure all allocations were successful.
   BOOST_TEST(first_byte);
@@ -29,8 +29,8 @@ int main (void) {
   BOOST_TEST(last_byte);
   
   void* first_word   = word_pool::allocate(),
-        middle_words = word_pool::allocate(word_pool::pool_size - 2),
-        last_word    = word_pool::allocate();
+      * middle_words = word_pool::allocate(word_pool::pool_size - 2),
+      * last_word    = word_pool::allocate();
 
   // Make sure all allocations were successful.
   BOOST_TEST(first_word);
@@ -38,8 +38,8 @@ int main (void) {
   BOOST_TEST(last_word);
   
   void* first_dword   = dword_pool::allocate(),
-        middle_dwords = dword_pool::allocate(dword_pool::pool_size - 2),
-        last_dword    = dword_pool::allocate();
+      * middle_dwords = dword_pool::allocate(dword_pool::pool_size - 2),
+      * last_dword    = dword_pool::allocate();
 
   // Make sure all allocations were successful.
   BOOST_TEST(first_dword);
@@ -47,8 +47,8 @@ int main (void) {
   BOOST_TEST(last_dword);
 
   void* first_qword   = qword_pool::allocate(),
-        middle_qwords = qword_pool::allocate(qword_pool::pool_size - 2),
-        last_qword    = qword_pool::allocate();
+      * middle_qwords = qword_pool::allocate(qword_pool::pool_size - 2),
+      * last_qword    = qword_pool::allocate();
 
   // Make sure all allocations were successful.
   BOOST_TEST(first_qword);
@@ -68,44 +68,44 @@ int main (void) {
   BOOST_TEST(!byte_pool::owns(middle_qwords));
   BOOST_TEST(!byte_pool::owns(last_qword));
   
-  BOOST_TEST(!byte_pool::owns(first_byte));
-  BOOST_TEST(!byte_pool::owns(middle_bytes));
-  BOOST_TEST(!byte_pool::owns(last_byte));
-  BOOST_TEST(byte_pool::owns(first_word));
-  BOOST_TEST(byte_pool::owns(middle_words));
-  BOOST_TEST(byte_pool::owns(last_word));
-  BOOST_TEST(!byte_pool::owns(first_dword));
-  BOOST_TEST(!byte_pool::owns(middle_dwords));
-  BOOST_TEST(!byte_pool::owns(last_dword));
-  BOOST_TEST(!byte_pool::owns(first_qword));
-  BOOST_TEST(!byte_pool::owns(middle_qwords));
-  BOOST_TEST(!byte_pool::owns(last_qword));
+  BOOST_TEST(!word_pool::owns(first_byte));
+  BOOST_TEST(!word_pool::owns(middle_bytes));
+  BOOST_TEST(!word_pool::owns(last_byte));
+  BOOST_TEST(word_pool::owns(first_word));
+  BOOST_TEST(word_pool::owns(middle_words));
+  BOOST_TEST(word_pool::owns(last_word));
+  BOOST_TEST(!word_pool::owns(first_dword));
+  BOOST_TEST(!word_pool::owns(middle_dwords));
+  BOOST_TEST(!word_pool::owns(last_dword));
+  BOOST_TEST(!word_pool::owns(first_qword));
+  BOOST_TEST(!word_pool::owns(middle_qwords));
+  BOOST_TEST(!word_pool::owns(last_qword));
   
-  BOOST_TEST(!byte_pool::owns(first_byte));
-  BOOST_TEST(!byte_pool::owns(middle_bytes));
-  BOOST_TEST(!byte_pool::owns(last_byte));
-  BOOST_TEST(!byte_pool::owns(first_word));
-  BOOST_TEST(!byte_pool::owns(middle_words));
-  BOOST_TEST(!byte_pool::owns(last_word));
-  BOOST_TEST(byte_pool::owns(first_dword));
-  BOOST_TEST(byte_pool::owns(middle_dwords));
-  BOOST_TEST(byte_pool::owns(last_dword));
-  BOOST_TEST(!byte_pool::owns(first_qword));
-  BOOST_TEST(!byte_pool::owns(middle_qwords));
-  BOOST_TEST(!byte_pool::owns(last_qword));
+  BOOST_TEST(!dword_pool::owns(first_byte));
+  BOOST_TEST(!dword_pool::owns(middle_bytes));
+  BOOST_TEST(!dword_pool::owns(last_byte));
+  BOOST_TEST(!dword_pool::owns(first_word));
+  BOOST_TEST(!dword_pool::owns(middle_words));
+  BOOST_TEST(!dword_pool::owns(last_word));
+  BOOST_TEST(dword_pool::owns(first_dword));
+  BOOST_TEST(dword_pool::owns(middle_dwords));
+  BOOST_TEST(dword_pool::owns(last_dword));
+  BOOST_TEST(!dword_pool::owns(first_qword));
+  BOOST_TEST(!dword_pool::owns(middle_qwords));
+  BOOST_TEST(!dword_pool::owns(last_qword));
   
-  BOOST_TEST(!byte_pool::owns(first_byte));
-  BOOST_TEST(!byte_pool::owns(middle_bytes));
-  BOOST_TEST(!byte_pool::owns(last_byte));
-  BOOST_TEST(!byte_pool::owns(first_word));
-  BOOST_TEST(!byte_pool::owns(middle_words));
-  BOOST_TEST(!byte_pool::owns(last_word));
-  BOOST_TEST(!byte_pool::owns(first_dword));
-  BOOST_TEST(!byte_pool::owns(middle_dwords));
-  BOOST_TEST(!byte_pool::owns(last_dword));
-  BOOST_TEST(byte_pool::owns(first_qword));
-  BOOST_TEST(byte_pool::owns(middle_qwords));
-  BOOST_TEST(byte_pool::owns(last_qword));
+  BOOST_TEST(!qword_pool::owns(first_byte));
+  BOOST_TEST(!qword_pool::owns(middle_bytes));
+  BOOST_TEST(!qword_pool::owns(last_byte));
+  BOOST_TEST(!qword_pool::owns(first_word));
+  BOOST_TEST(!qword_pool::owns(middle_words));
+  BOOST_TEST(!qword_pool::owns(last_word));
+  BOOST_TEST(!qword_pool::owns(first_dword));
+  BOOST_TEST(!qword_pool::owns(middle_dwords));
+  BOOST_TEST(!qword_pool::owns(last_dword));
+  BOOST_TEST(qword_pool::owns(first_qword));
+  BOOST_TEST(qword_pool::owns(middle_qwords));
+  BOOST_TEST(qword_pool::owns(last_qword));
 
   return boost::report_errors();
 }

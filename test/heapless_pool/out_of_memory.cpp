@@ -26,7 +26,7 @@ void test (void) {
 
   // Verify that there's space for one more object in the pool. 
   BOOST_TEST(pool::size() == (pool::pool_size - 1));
-  BOOST_TEST_EQ(pool::remaining(), 1);
+  BOOST_TEST_EQ(pool::remaining(), 1U);
  
   { // Request an array that the pool should fail to allocate.
     void* ptr = pool::allocate(2);
@@ -35,7 +35,7 @@ void test (void) {
   
   // Make sure the bad allocation didn't mutate the pool data.
   BOOST_TEST(pool::size() == (pool::pool_size - 1));
-  BOOST_TEST_EQ(pool::remaining(), 1);
+  BOOST_TEST_EQ(pool::remaining(), 1U);
   
   { // Exhaust the pool.
     void* ptr = pool::allocate(1);
@@ -44,7 +44,7 @@ void test (void) {
  
   // Verify that the pool is exhausted.
   BOOST_TEST(pool::size() == pool::pool_size);
-  BOOST_TEST_EQ(pool::remaining(), 0);
+  BOOST_TEST_EQ(pool::remaining(), 0U);
 
   // Make a bad allocation request (asking for an object).
   BOOST_TEST_EQ(pool::allocate(),
@@ -52,7 +52,7 @@ void test (void) {
 
   // Make sure the bad allocation didn't mutate the pool data.
   BOOST_TEST(pool::size() == pool::pool_size);
-  BOOST_TEST_EQ(pool::remaining(), 0);
+  BOOST_TEST_EQ(pool::remaining(), 0U);
   
   // Make a bad allocation request (asking for an array).
   BOOST_TEST_EQ(pool::allocate(64),
@@ -60,14 +60,14 @@ void test (void) {
 
   // Make sure the bad allocation didn't mutate the pool data.
   BOOST_TEST(pool::size() == pool::pool_size);
-  BOOST_TEST_EQ(pool::remaining(), 0);
+  BOOST_TEST_EQ(pool::remaining(), 0U);
   
   // Make another bad allocation request (with an invalid count).
   BOOST_TEST_EQ(pool::allocate(0), reinterpret_cast<void*>(pool::invalid_count));
   
   // Make sure the second bad allocation didn't mutate the pool data.
   BOOST_TEST(pool::size() == pool::pool_size);
-  BOOST_TEST_EQ(pool::remaining(), 0);
+  BOOST_TEST_EQ(pool::remaining(), 0U);
 }
 
 }

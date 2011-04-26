@@ -9,7 +9,10 @@
 #if !defined(EDK_0701C127_B570_4CDC_8DC0_226B8A2E4035)
 #define EDK_0701C127_B570_4CDC_8DC0_226B8A2E4035
 
+#include <limits.h>
+
 #include <boost/cstdint.hpp>
+#include <boost/integer.hpp>
 #include <boost/config.hpp>
 
 #include <boost/mpl/size_t.hpp>
@@ -18,8 +21,7 @@
 #include <boost/mpl/modulus.hpp>
 
 #include <edk/compile_time_assert.hpp>
-#include <edk/config/branch_hints.hpp>
-#include <edk/config/page_size.hpp>
+#include <edk/config.hpp>
 
 namespace edk {
 namespace memory {
@@ -48,7 +50,7 @@ struct heapless_pool {
     (boost::mpl::size_t<ObjectSize>, boost::mpl::size_t<Capacity>));
 
   typedef boost::uint8_t byte_type;
-  typedef std::ptrdiff_t size_type;
+  typedef boost::uint_t<sizeof(void*) * CHAR_BIT>::exact size_type;
 
   // Error codes that malloc might return.
   enum { invalid_count = -1 };
@@ -89,12 +91,29 @@ struct heapless_pool {
     return static_cast<size_type>((end - next) / ObjectSize);
   }
 
+  template <typename T>
+  static bool owns (T* ptr) {
+    size_type const point = reinterpret_cast<size_type const>(ptr);
+    size_type const lower = reinterpret_cast<size_type const>(first);
+    size_type const upper = reinterpret_cast<size_type const>(end);
+    return ((point < upper) && (point >= lower));
+  }
+
+  template <typename T>
+  static bool owns (T const* ptr) {
+    size_type const point = reinterpret_cast<size_type const>(ptr);
+    size_type const lower = reinterpret_cast<size_type const>(first);
+    size_type const upper = reinterpret_cast<size_type const>(end);
+    return ((point < upper) && (point >= lower));
+  }
+
   // We don't want the buffer to go into the .bss section. It would be
   // initialized to zero at runtime by the loader, and expensive serial
   // operations are bad.
   static byte_type buffer[Capacity];
+  static byte_type* const first;
+  static byte_type* const end;
   static byte_type* next;
-  static byte_type const* end;
 };
 
 template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
@@ -102,14 +121,19 @@ typename heapless_pool<ObjectSize, Capacity, ID>::byte_type
 heapless_pool<ObjectSize, Capacity, ID>::buffer[Capacity];
 
 template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
-typename heapless_pool<ObjectSize, Capacity, ID>::byte_type*
-heapless_pool<ObjectSize, Capacity, ID>::next 
+typename heapless_pool<ObjectSize, Capacity, ID>::byte_type* const
+heapless_pool<ObjectSize, Capacity, ID>::first 
   = &heapless_pool<ObjectSize, Capacity, ID>::buffer[0];
 
 template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
-typename heapless_pool<ObjectSize, Capacity, ID>::byte_type const*
+typename heapless_pool<ObjectSize, Capacity, ID>::byte_type* const
 heapless_pool<ObjectSize, Capacity, ID>::end 
   = &heapless_pool<ObjectSize, Capacity, ID>::buffer[Capacity];
+
+template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
+typename heapless_pool<ObjectSize, Capacity, ID>::byte_type*
+heapless_pool<ObjectSize, Capacity, ID>::next 
+  = heapless_pool<ObjectSize, Capacity, ID>::first;
 
 } // memory
 } // edk
