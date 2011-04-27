@@ -20,14 +20,14 @@ void test (void) {
   typedef heapless_pool<sizeof(T), 0x1000> pool;
 
   // Verify the initial state of the pool.
-  BOOST_TEST_EQ(pool::size(), 0);
+  BOOST_TEST_EQ(pool::size(), 0U);
   BOOST_TEST(pool::remaining() == pool::pool_size);
   
   // Make a bad allocation request.
   BOOST_TEST_EQ(pool::allocate(0), reinterpret_cast<void*>(pool::invalid_count));
   
   // Make sure the bad allocation didn't mutate the pool data.
-  BOOST_TEST_EQ(pool::size(), 0);
+  BOOST_TEST_EQ(pool::size(), 0U);
   BOOST_TEST(pool::remaining() == pool::pool_size);
 }
 

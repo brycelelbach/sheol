@@ -12,6 +12,10 @@ using edk::memory::heapless_pool;
 int main (void) {
   typedef heapless_pool<5, 0x1000> pool;
 
-  pool p; // instantiate
+  // instantiate the pool
+  void* p = 0;
+  p = pool::allocate(); 
+
+  return 0;
 }
 
