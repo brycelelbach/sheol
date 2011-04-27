@@ -74,7 +74,10 @@
     bool operator!= (volatile tagged_ptr const& p) const
     { return !operator==(p); }
 
-    T* get_ptr (void) const volatile
+    T const* get_ptr (void) const volatile
+    { return extract_ptr(ptr); }
+
+    T* get_ptr (void) volatile
     { return extract_ptr(ptr); }
 
     void set_ptr (T* p) volatile {
@@ -90,10 +93,16 @@
       ptr = pack_ptr(p, t);
     }
 
-    T& operator* (void) const
+    T const& operator* (void) const
     { return *get_ptr(); }
 
-    T* operator-> (void) const
+    T& operator* (void)
+    { return *get_ptr(); }
+
+    T const* operator-> (void) const
+    { return get_ptr(); }
+
+    T* operator-> (void) 
     { return get_ptr(); }
 
     operator bool (void) const
