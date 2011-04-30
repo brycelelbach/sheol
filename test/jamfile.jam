@@ -7,9 +7,10 @@
 
 project ;
 
-run freelist/free_entry.cpp ; 
+run freelist/one_size_free_entry/constants.cpp : : : : osfe_constants ; 
+run freelist/variable_size_free_entry/constants.cpp : : : : vsfe_constants ; 
 run tagged_ptr.cpp ;
-run heapless_pool/limits.cpp ;
+run heapless_pool/constants.cpp : : : : heapless_pool_constants ;
 run heapless_pool/allocate_objects.cpp ;
 run heapless_pool/allocate_arrays.cpp ;
 run heapless_pool/invalid_count.cpp ;

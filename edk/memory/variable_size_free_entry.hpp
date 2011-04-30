@@ -33,10 +33,10 @@ namespace edk {
 namespace memory {
 
 template <typename T, typename Enable = void>
-struct free_entry;
+struct variable_size_free_entry;
 
 template <typename T, typename Enable>
-struct free_entry {
+struct variable_size_free_entry {
   EDK_COMPILE_TIME_ASSERT(
     (boost::mpl::less<
       boost::mpl::size_t<sizeof(void*) * 2>,
@@ -58,33 +58,45 @@ struct free_entry {
     boost::integer_traits<size_type>::const_max);
 
  private:
-  free_entry* ptr_;
+  variable_size_free_entry* ptr_;
   size_type size_;
 
  public:
-  free_entry (void): ptr_(0), size_(0) { }
+  variable_size_free_entry (void): ptr_(0), size_(0) { }
+  
+  explicit variable_size_free_entry (void* p, size_type s = 1) {
+    reset(p, s);
+  }
 
-  template <typename Ptr>
-  free_entry (Ptr* p, size_type s = 1) {
+  explicit variable_size_free_entry (T* p, size_type s = 1) {
     reset(p, s);
   }
   
-  free_entry (free_entry const& other): ptr_(other.ptr_), size_(other.size_) { } 
+  variable_size_free_entry (variable_size_free_entry const& other):
+    ptr_(other.ptr_), size_(other.size_) { } 
   
-  free_entry& operator= (free_entry const& other) {
+  variable_size_free_entry& operator= (variable_size_free_entry const& other) {
     ptr_ = other.ptr_;
     size_ = other.size_;
   }
-
-  template <typename Ptr>
-  free_entry& operator= (Ptr* p) {
+  
+  variable_size_free_entry& operator= (void* p) {
     reset(p);
     return *this;
   }
 
-  template <typename Ptr>
-  void reset (Ptr* p = 0, size_type s = 1) {
-    ptr_ = reinterpret_cast<free_entry*>(p);
+  variable_size_free_entry& operator= (T* p) {
+    reset(p);
+    return *this;
+  }
+  
+  void reset (void* p = 0, size_type s = 1) {
+    ptr_ = reinterpret_cast<variable_size_free_entry*>(p);
+    size_ = s;
+  } 
+
+  void reset (T* p, size_type s = 1) {
+    ptr_ = reinterpret_cast<variable_size_free_entry*>(p);
     size_ = s;
   } 
 
@@ -94,28 +106,28 @@ struct free_entry {
   void size (size_type s)
   { size_ = s; }
 
-  free_entry const& operator* (void) const
+  variable_size_free_entry const& operator* (void) const
   { return *ptr_; }
 
-  free_entry& operator* (void)
+  variable_size_free_entry& operator* (void)
   { return *ptr_; }
 
-  free_entry const* operator-> (void) const
+  variable_size_free_entry const* operator-> (void) const
   { return ptr_; }
 
-  free_entry* operator-> (void) 
+  variable_size_free_entry* operator-> (void) 
   { return ptr_; }
 
-  free_entry const* get (void) const
+  variable_size_free_entry const* get (void) const
   { return ptr_; }
 
-  free_entry* get (void) 
+  variable_size_free_entry* get (void) 
   { return ptr_; }
 
-  bool operator== (free_entry const& rhs) const
+  bool operator== (variable_size_free_entry const& rhs) const
   { return (ptr_ == rhs.ptr_) && (size_ == rhs.size_); }
 
-  bool operator!= (free_entry const& rhs) const
+  bool operator!= (variable_size_free_entry const& rhs) const
   { return !(*this == rhs); } 
     
   operator bool (void) const
@@ -124,7 +136,7 @@ struct free_entry {
 
 #if defined(BOOST_DETECT_X86_64_ARCHITECTURE)
   template <typename T>
-  struct free_entry<T, typename boost::enable_if<
+  struct variable_size_free_entry<T, typename boost::enable_if<
     boost::mpl::equal_to<
       boost::mpl::size_t<sizeof(void*)>,
       boost::mpl::size_t<sizeof(T)>
@@ -136,7 +148,7 @@ struct free_entry {
         type_is_polymorphic, (T, boost::mpl::size_t<sizeof(T)>));
     #endif
 
-    typedef edk::tagged_ptr<free_entry> tagged_ptr_type;
+    typedef edk::tagged_ptr<variable_size_free_entry> tagged_ptr_type;
 
     // This is only a word.
     typedef typename tagged_ptr_type::tag_type size_type;
@@ -150,29 +162,41 @@ struct free_entry {
     tagged_ptr_type ptr_;
   
    public:
-    free_entry (void): ptr_() { }
+    variable_size_free_entry (void): ptr_() { }
+    
+    explicit variable_size_free_entry (void* p, size_type s = 1) {
+      reset(p, s);
+    }
   
-    template <typename Ptr>
-    free_entry (Ptr* p, size_type s = 1) {
+    explicit variable_size_free_entry (T* p, size_type s = 1) {
       reset(p, s);
     }
     
-    free_entry (free_entry const& other): ptr_(other.ptr_) { } 
+    variable_size_free_entry (variable_size_free_entry const& other):
+      ptr_(other.ptr_) { } 
     
-    free_entry& operator= (free_entry const& other) {
+    variable_size_free_entry& operator= (variable_size_free_entry const& other) {
       ptr_ = other.ptr_; 
       return *this;
     }
-  
-    template <typename Ptr>
-    free_entry& operator= (Ptr* p) {
+    
+    variable_size_free_entry& operator= (void* p) {
       reset(p);
       return *this;
     }
   
-    template <typename Ptr>
-    void reset (Ptr* p = 0, size_type s = 1) {
-      ptr_.set_ptr(reinterpret_cast<free_entry*>(p));
+    variable_size_free_entry& operator= (T* p) {
+      reset(p);
+      return *this;
+    }
+  
+    void reset (void* p = 0, size_type s = 1) {
+      ptr_.set_ptr(reinterpret_cast<variable_size_free_entry*>(p));
+      size(s);
+    } 
+
+    void reset (T* p, size_type s = 1) {
+      ptr_.set_ptr(reinterpret_cast<variable_size_free_entry*>(p));
       size(s);
     } 
   
@@ -182,28 +206,28 @@ struct free_entry {
     void size (size_type s)
     { ptr_.set_tag(s); }
   
-    free_entry const& operator* (void) const
+    variable_size_free_entry const& operator* (void) const
     { return *ptr_.get_ptr(); }
   
-    free_entry& operator* (void)
+    variable_size_free_entry& operator* (void)
     { return *ptr_.get_ptr(); }
   
-    free_entry const* operator-> (void) const
+    variable_size_free_entry const* operator-> (void) const
     { return ptr_.get_ptr(); }
   
-    free_entry* operator-> (void) 
+    variable_size_free_entry* operator-> (void) 
     { return ptr_.get_ptr(); }
   
-    free_entry const* get (void) const
+    variable_size_free_entry const* get (void) const
     { return ptr_.get_ptr(); }
   
-    free_entry* get (void) 
+    variable_size_free_entry* get (void) 
     { return ptr_.get_ptr(); }
   
-    bool operator== (free_entry const& rhs) const
+    bool operator== (variable_size_free_entry const& rhs) const
     { return (ptr_ == rhs.ptr_); }
   
-    bool operator!= (free_entry const& rhs) const
+    bool operator!= (variable_size_free_entry const& rhs) const
     { return !(*this == rhs); } 
       
     operator bool (void) const

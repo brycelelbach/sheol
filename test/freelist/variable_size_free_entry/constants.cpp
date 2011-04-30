@@ -7,9 +7,9 @@
 
 #include <boost/detail/lightweight_test.hpp>
 
-#include <edk/memory/free_entry.hpp>
+#include <edk/memory/variable_size_free_entry.hpp>
 
-using edk::memory::free_entry;
+using edk::memory::variable_size_free_entry;
 
 int main (void) {
   BOOST_TEST(true);
