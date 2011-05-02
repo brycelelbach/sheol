@@ -8,7 +8,9 @@
 project ;
 
 run freelist/one_size_free_entry/constants.cpp : : : : osfe_constants ; 
+run freelist/one_size_free_entry/basic.cpp : : : : osfe_basic ; 
 run freelist/variable_size_free_entry/constants.cpp : : : : vsfe_constants ; 
+run freelist/variable_size_free_entry/basic.cpp : : : : vsfe_basic ; 
 run tagged_ptr.cpp ;
 run heapless_pool/constants.cpp : : : : heapless_pool_constants ;
 run heapless_pool/allocate_objects.cpp ;

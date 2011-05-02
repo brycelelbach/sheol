@@ -48,13 +48,17 @@ struct one_size_free_entry {
 
   typedef std::size_t size_type;
 
-  BOOST_STATIC_CONSTANT(size_type, object_size = sizeof(T));
+  enum { object_size = sizeof(T) };
     
  private:
   one_size_free_entry* ptr_;
 
  public:
   one_size_free_entry (void): ptr_(0) { }
+  
+  explicit one_size_free_entry (one_size_free_entry* p) {
+    reset(p);
+  }
 
   explicit one_size_free_entry (void* p) {
     reset(p);
@@ -68,6 +72,12 @@ struct one_size_free_entry {
   
   one_size_free_entry& operator= (one_size_free_entry const& other) {
     ptr_ = other.ptr_;
+    return *this;
+  }
+  
+  one_size_free_entry& operator= (one_size_free_entry* p) {
+    reset(p);
+    return *this;
   }
   
   one_size_free_entry& operator= (void* p) {
@@ -80,7 +90,11 @@ struct one_size_free_entry {
     return *this;
   }
 
-  void reset (void* p = 0) {
+  void reset (one_size_free_entry* p = 0) {
+    ptr_ = p; 
+  }
+  
+  void reset (void* p) {
     ptr_ = reinterpret_cast<one_size_free_entry*>(p);
   }
 
@@ -105,6 +119,12 @@ struct one_size_free_entry {
 
   one_size_free_entry* get (void) 
   { return ptr_; }
+  
+  T const* retrieve (void) const
+  { return reinterpret_cast<T const*>(get()); }
+  
+  T* retrieve (void) 
+  { return reinterpret_cast<T*>(get()); }
 
   bool operator== (one_size_free_entry const& rhs) const
   { return (ptr_ == rhs.ptr_); }

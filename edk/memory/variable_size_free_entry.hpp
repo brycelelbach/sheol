@@ -52,17 +52,22 @@ struct variable_size_free_entry {
 
   typedef std::size_t size_type;
 
-  BOOST_STATIC_CONSTANT(size_type, object_size = sizeof(T));
+  enum { object_size = sizeof(T) };
     
-  BOOST_STATIC_CONSTANT(size_type, maximum_array_size =
-    boost::integer_traits<size_type>::const_max);
+  enum { maximum_array_size = boost::integer_traits<size_type>::const_max };
 
  private:
   variable_size_free_entry* ptr_;
   size_type size_;
 
  public:
-  variable_size_free_entry (void): ptr_(0), size_(0) { }
+  variable_size_free_entry (void): ptr_(0), size_(1) { }
+  
+  explicit variable_size_free_entry (variable_size_free_entry* p,
+                                     size_type s = 1)
+  {
+    reset(p, s);
+  }
   
   explicit variable_size_free_entry (void* p, size_type s = 1) {
     reset(p, s);
@@ -78,6 +83,12 @@ struct variable_size_free_entry {
   variable_size_free_entry& operator= (variable_size_free_entry const& other) {
     ptr_ = other.ptr_;
     size_ = other.size_;
+    return *this;
+  }
+  
+  variable_size_free_entry& operator= (variable_size_free_entry* p) {
+    reset(p);
+    return *this;
   }
   
   variable_size_free_entry& operator= (void* p) {
@@ -90,7 +101,12 @@ struct variable_size_free_entry {
     return *this;
   }
   
-  void reset (void* p = 0, size_type s = 1) {
+  void reset (variable_size_free_entry* p = 0, size_type s = 1) {
+    ptr_ = p; 
+    size_ = s;
+  } 
+  
+  void reset (void* p, size_type s = 1) {
     ptr_ = reinterpret_cast<variable_size_free_entry*>(p);
     size_ = s;
   } 
@@ -123,6 +139,12 @@ struct variable_size_free_entry {
 
   variable_size_free_entry* get (void) 
   { return ptr_; }
+    
+  T const* retrieve (void) const
+  { return reinterpret_cast<T const*>(get()); }
+  
+  T* retrieve (void) 
+  { return reinterpret_cast<T*>(get()); }
 
   bool operator== (variable_size_free_entry const& rhs) const
   { return (ptr_ == rhs.ptr_) && (size_ == rhs.size_); }
@@ -137,7 +159,7 @@ struct variable_size_free_entry {
 #if defined(BOOST_DETECT_X86_64_ARCHITECTURE)
   template <typename T>
   struct variable_size_free_entry<T, typename boost::enable_if<
-    boost::mpl::equal_to<
+    boost::mpl::less<
       boost::mpl::size_t<sizeof(void*)>,
       boost::mpl::size_t<sizeof(T)>
     >
@@ -153,16 +175,23 @@ struct variable_size_free_entry {
     // This is only a word.
     typedef typename tagged_ptr_type::tag_type size_type;
 
-    BOOST_STATIC_CONSTANT(size_type, object_size = sizeof(T));
+    enum { object_size = sizeof(T) };
 
-    BOOST_STATIC_CONSTANT(size_type, maximum_array_size =
-      boost::integer_traits<size_type>::const_max);
+    enum { maximum_array_size = boost::integer_traits<size_type>::const_max };
 
    private:
     tagged_ptr_type ptr_;
   
    public:
-    variable_size_free_entry (void): ptr_() { }
+    variable_size_free_entry (void) {
+      reset(reinterpret_cast<void*>(0), 1);
+    }
+    
+    explicit variable_size_free_entry (variable_size_free_entry* p,
+                                       size_type s = 1)
+    {
+      reset(p, s);
+    }
     
     explicit variable_size_free_entry (void* p, size_type s = 1) {
       reset(p, s);
@@ -180,6 +209,11 @@ struct variable_size_free_entry {
       return *this;
     }
     
+    variable_size_free_entry& operator= (variable_size_free_entry* p) {
+      reset(p);
+      return *this;
+    }
+    
     variable_size_free_entry& operator= (void* p) {
       reset(p);
       return *this;
@@ -190,7 +224,12 @@ struct variable_size_free_entry {
       return *this;
     }
   
-    void reset (void* p = 0, size_type s = 1) {
+    void reset (variable_size_free_entry* p = 0, size_type s = 1) {
+      ptr_.set_ptr(reinterpret_cast<variable_size_free_entry*>(p));
+      size(s);
+    } 
+  
+    void reset (void* p, size_type s = 1) {
       ptr_.set_ptr(reinterpret_cast<variable_size_free_entry*>(p));
       size(s);
     } 
@@ -223,6 +262,12 @@ struct variable_size_free_entry {
   
     variable_size_free_entry* get (void) 
     { return ptr_.get_ptr(); }
+    
+    T const* retrieve (void) const
+    { return reinterpret_cast<T const*>(get()); }
+  
+    T* retrieve (void) 
+    { return reinterpret_cast<T*>(get()); }
   
     bool operator== (variable_size_free_entry const& rhs) const
     { return (ptr_ == rhs.ptr_); }
