@@ -5,26 +5,21 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <sheol/lightweight_test.hpp>
-#include <sheol/detect/architecture.hpp>
+#include <sheol/memory/one_size_free_entry.hpp>
 
-#if defined(SHEOL_X86_64_ARCHITECTURE)
-  #include <sheol/tagged_ptr.hpp>
+using sheol::memory::one_size_free_entry;
 
-  using sheol::tagged_ptr;
-#endif
-
+struct value_type { void* p; };
 
 int main (void) {
-  #if defined(SHEOL_X86_64_ARCHITECTURE)
-    int a(1);
-    int* const b = &a;
+  typedef one_size_free_entry<value_type> osfe_type;
 
-    tagged_ptr<int> i(&b);
-  #else
-    #error Architecture not supported.
-  #endif
+  value_type a;
 
-  return 0;
+  osfe_type i;
+
+  i = osfe_type(&a);
+  
+  return 0; 
 }
 

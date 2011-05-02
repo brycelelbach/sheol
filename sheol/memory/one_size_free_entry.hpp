@@ -29,7 +29,7 @@ struct one_size_free_entry: pod_one_size_free_entry<T> {
     base_type::reset();
   }
   
-  one_size_free_entry (base_type* p) {
+  explicit one_size_free_entry (base_type* p) {
     base_type::reset(p);
   }
 
@@ -37,9 +37,18 @@ struct one_size_free_entry: pod_one_size_free_entry<T> {
     base_type::reset(p);
   }
   
+  one_size_free_entry (one_size_free_entry& other) {
+    base_type::reset(other.get());
+  } 
+  
   one_size_free_entry (base_type& other) {
     base_type::reset(other.get());
   } 
+  
+  one_size_free_entry& operator= (one_size_free_entry& other) {
+    base_type::reset(other.get());
+    return *this;
+  }
   
   one_size_free_entry& operator= (base_type& other) {
     base_type::reset(other.get());

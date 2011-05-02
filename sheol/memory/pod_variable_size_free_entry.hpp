@@ -26,7 +26,7 @@
 #endif
 
 #if defined(SHEOL_X86_64_ARCHITECTURE)
-  #include <sheol/tagged_ptr.hpp>
+  #include <sheol/adt/pod_tagged_ptr.hpp>
 #endif
 
 #include <sheol/compile_time_assert.hpp> 
@@ -198,7 +198,7 @@ struct pod_variable_size_free_entry<T, typename boost::enable_if<
         type_is_polymorphic, (T, boost::mpl::size_t<sizeof(T)>));
     #endif
 
-    typedef sheol::tagged_ptr<pod_variable_size_free_entry> data_type;
+    typedef sheol::adt::pod_tagged_ptr<pod_variable_size_free_entry> data_type;
 
     data_type data;
 

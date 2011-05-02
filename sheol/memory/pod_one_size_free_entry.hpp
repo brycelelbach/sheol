@@ -87,7 +87,7 @@ struct pod_one_size_free_entry {
   { return (get() == rhs.get()); }
 
   bool operator!= (pod_one_size_free_entry const& rhs) const
-  { return (get() != rhs.get()); } 
+  { return !operator==(rhs); } 
     
   operator bool (void) const
   { return get() != 0; }

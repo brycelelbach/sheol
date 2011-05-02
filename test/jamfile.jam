@@ -10,19 +10,26 @@ project ;
 run freelist/one_size_free_entry/constants.cpp : : : : osfe_constants ; 
 run freelist/one_size_free_entry/basics.cpp : : : : osfe_basics ; 
 run freelist/one_size_free_entry/comparisons.cpp : : : : osfe_comparisons ; 
+run freelist/one_size_free_entry/podness.cpp : : : : osfe_podness ;
 compile-fail freelist/one_size_free_entry/type_is_too_small.cpp : : osfe_type_is_too_small ;
 compile-fail freelist/one_size_free_entry/illegal_access.cpp : : osfe_illegal_access ;
+compile-fail freelist/one_size_free_entry/no_const_ref_copy_assignment.cpp : : osfe_no_const_ref_copy_assignment ;
+compile-fail freelist/one_size_free_entry/no_const_ref_copy_ctor.cpp : : osfe_no_const_ref_copy_ctor ;
+compile-fail freelist/one_size_free_entry/no_temp_copy_assignment.cpp : : osfe_no_temp_copy_assignment ;
 
 run freelist/variable_size_free_entry/constants.cpp : : : : vsfe_constants ; 
 run freelist/variable_size_free_entry/basics.cpp : : : : vsfe_basics ; 
 run freelist/variable_size_free_entry/comparisons.cpp : : : : vsfe_comparisons ; 
+run freelist/variable_size_free_entry/podness.cpp : : : : vsfe_podness ;
 compile-fail freelist/variable_size_free_entry/type_is_too_small.cpp : : vsfe_type_is_too_small ;
 compile-fail freelist/variable_size_free_entry/illegal_access.cpp : : vsfe_illegal_access ;
+compile-fail freelist/variable_size_free_entry/no_const_ref_copy_assignment.cpp : : vsfe_no_const_ref_copy_assignment ;
+compile-fail freelist/variable_size_free_entry/no_const_ref_copy_ctor.cpp : : vsfe_no_const_ref_copy_ctor ;
+compile-fail freelist/variable_size_free_entry/no_temp_copy_assignment.cpp : : vsfe_no_temp_copy_assignment ;
 
 run tagged_ptr/basics.cpp : : : : tagged_ptr_basics ;
 run tagged_ptr/comparisons.cpp : : : : tagged_ptr_comparisons ;
-compile-fail tagged_ptr/no_const_ptr_assignment.cpp : : tagged_ptr_no_const_ptr_assignment ;
-compile-fail tagged_ptr/no_const_ptr_ctor.cpp : : tagged_ptr_no_const_ptr_ctor ;
+run tagged_ptr/podness.cpp : : : : tagged_ptr_podness ;
 compile-fail tagged_ptr/no_const_ref_copy_assignment.cpp : : tagged_ptr_no_const_ref_copy_assignment ;
 compile-fail tagged_ptr/no_const_ref_copy_ctor.cpp : : tagged_ptr_no_const_ref_copy_ctor ;
 compile-fail tagged_ptr/no_temp_copy_assignment.cpp : : tagged_ptr_no_temp_copy_assignment ;

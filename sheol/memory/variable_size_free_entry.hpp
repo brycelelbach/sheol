@@ -28,14 +28,23 @@ struct variable_size_free_entry: pod_variable_size_free_entry<T> {
   variable_size_free_entry (void)
   { base_type::reset(); }
   
-  variable_size_free_entry (base_type* p, typename base_type::size_type s = 1)
+  explicit variable_size_free_entry (base_type* p,
+                                     typename base_type::size_type s = 1)
   { base_type::reset(p, s); }
   
   explicit variable_size_free_entry (T* p, typename base_type::size_type s = 1)
   { base_type::reset(p, s); }
   
+  variable_size_free_entry (variable_size_free_entry& other)
+  { base_type::reset(other.get(), other.size()); } 
+
   variable_size_free_entry (base_type& other)
   { base_type::reset(other.get(), other.size()); } 
+  
+  variable_size_free_entry& operator= (variable_size_free_entry& other) {
+    base_type::reset(other.get(), other.size());
+    return *this;
+  }
   
   variable_size_free_entry& operator= (base_type& other) {
     base_type::reset(other.get(), other.size());

@@ -20,9 +20,10 @@
   #include <boost/cstdint.hpp>
 
   namespace sheol {
+  namespace adt {
 
   template <typename T>
-  struct tagged_ptr {
+  struct pod_tagged_ptr {
     typedef T value_type;
     typedef boost::uint64_t compressed_ptr_type;
     typedef boost::uint16_t tag_type;
@@ -51,43 +52,8 @@
       return ret.value;
     }
 
-   public:
-    tagged_ptr (void): ptr(0) {}
-
-    tagged_ptr (tagged_ptr volatile& p): ptr(p.ptr) {}
-
-    explicit tagged_ptr (T* p): ptr(pack_ptr(p, 0)) {}
-
-    tagged_ptr (T* p, tag_type t): ptr(pack_ptr(p, t)) {}
-
-    tagged_ptr& operator= (tagged_ptr volatile& p) {
-      ptr = p.ptr;
-      return *this;
-    }
-    
-    tagged_ptr volatile& operator= (tagged_ptr volatile& p) volatile {
-      ptr = p.ptr;
-      return *this;
-    }
-    
-    tagged_ptr& operator= (T* p) {
-      reset(p);
-      return *this;
-    }
-    
-    tagged_ptr volatile& operator= (T* p) volatile {
-      reset(p);
-      return *this;
-    }
-
-    void reset (T* p, tag_type t = 0) volatile
+    void reset (T* p = 0, tag_type t = 0) volatile
     { ptr = pack_ptr(p, t); }
-
-    bool operator== (tagged_ptr volatile const& p) const volatile
-    { return (ptr == p.ptr); }
-
-    bool operator!= (tagged_ptr volatile const& p) const volatile
-    { return !operator==(p); }
 
     T const* get_ptr (void) const volatile
     { return extract_ptr(ptr); }
@@ -122,11 +88,17 @@
 
     operator bool (void) const volatile
     { return get_ptr() != 0; }
+    
+    bool operator== (pod_tagged_ptr volatile const& rhs) const volatile
+    { return (get_ptr() == rhs.get_ptr()) && (get_tag() == rhs.get_tag()); }
 
-   private:
+    bool operator!= (pod_tagged_ptr volatile const& rhs) const volatile
+    { return !operator==(rhs); }
+
     compressed_ptr_type ptr;
   };
 
+  } // adt
   } // sheol 
 #else
   #error Unsupported platform

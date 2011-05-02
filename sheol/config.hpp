@@ -9,6 +9,8 @@
 #define SHEOL_7F578F96_35D0_4D8F_B5D7_4F131BF74058
 
 #include <sheol/config/branch_hints.hpp>
+#include <sheol/config/manual_profiling.hpp>
+#include <sheol/config/unused.hpp>
 
 // Defining this macro will allow polymorphic types to be used with sheol
 // allocators.

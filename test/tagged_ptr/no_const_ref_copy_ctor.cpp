@@ -9,11 +9,10 @@
 #include <sheol/detect/architecture.hpp>
 
 #if defined(SHEOL_X86_64_ARCHITECTURE)
-  #include <sheol/tagged_ptr.hpp>
+  #include <sheol/adt/tagged_ptr.hpp>
 
-  using sheol::tagged_ptr;
+  using sheol::adt::tagged_ptr;
 #endif
-
 
 int main (void) {
   #if defined(SHEOL_X86_64_ARCHITECTURE)
