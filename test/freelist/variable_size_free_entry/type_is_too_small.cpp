@@ -7,9 +7,9 @@
 
 #include <boost/cstdint.hpp>
 
-#include <edk/memory/variable_size_free_entry.hpp>
+#include <sheol/memory/variable_size_free_entry.hpp>
 
-using edk::memory::variable_size_free_entry;
+using sheol::memory::variable_size_free_entry;
 
 int main (void) {
   typedef variable_size_free_entry<boost::uint8_t> byte_entry;

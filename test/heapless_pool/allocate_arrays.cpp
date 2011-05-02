@@ -5,21 +5,20 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <boost/detail/lightweight_test.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/cstdint.hpp>
 
-#include <edk/memory/heapless_pool.hpp>
+#include <sheol/lightweight_test.hpp>
+#include <sheol/memory/heapless_pool.hpp>
 
-using edk::memory::heapless_pool;
+using sheol::memory::heapless_pool;
 
 namespace {
 
 template <typename T>
 void test (void) {
-  // On most x86 systems, the (smallest) page size is 4 kilobytes.
   typedef heapless_pool<sizeof(T), 0x1000> pool;
 
   // A random number generator 
@@ -36,8 +35,8 @@ void test (void) {
   for (typename pool::size_type i = 0; i < pool_size; ++i) {
     ptrs[i] = reinterpret_cast<T*>(pool::allocate(2));
 
-    BOOST_TEST(ptrs[i]);
-    BOOST_TEST(ptrs[i] != reinterpret_cast<void*>(pool::invalid_count));
+    SHEOL_TEST(ptrs[i]);
+    SHEOL_TEST(ptrs[i] != reinterpret_cast<void*>(pool::invalid_count));
 
     if (ptrs[i] && (ptrs[i] != reinterpret_cast<void*>(pool::invalid_count))) {
       (ptrs[i])[0] = dist(rng);
@@ -56,14 +55,14 @@ void test (void) {
 
   // Check for corruption 
   for (typename pool::size_type i = 0; i < pool_size; ++i) {
-    BOOST_TEST(ptrs[i]);
-    BOOST_TEST(ptrs[i] != reinterpret_cast<void*>(pool::invalid_count));
+    SHEOL_TEST(ptrs[i]);
+    SHEOL_TEST(ptrs[i] != reinterpret_cast<void*>(pool::invalid_count));
 
     if (ptrs[i] && (ptrs[i] != reinterpret_cast<void*>(pool::invalid_count))) {
       // We cast here to avoid problems with iostream interpreting uint8_t as a
       // character.
-      BOOST_TEST_EQ(boost::uint64_t((ptrs[i])[0]), boost::uint64_t(dist(rng)));
-      BOOST_TEST_EQ(boost::uint64_t((ptrs[i])[1]), boost::uint64_t(dist(rng)));
+      SHEOL_TEST_EQ(boost::uint64_t((ptrs[i])[0]), boost::uint64_t(dist(rng)));
+      SHEOL_TEST_EQ(boost::uint64_t((ptrs[i])[1]), boost::uint64_t(dist(rng)));
     }
     else {
       // Call the rng anyways, so that the next iteration isn't screwed up. 
@@ -81,6 +80,6 @@ int main (void) {
   test<boost::uint32_t>();
   test<boost::uint64_t>();
 
-  return boost::report_errors();
+  return sheol::report_errors();
 }
 

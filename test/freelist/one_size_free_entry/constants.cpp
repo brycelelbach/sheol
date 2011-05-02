@@ -6,11 +6,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <boost/cstdint.hpp>
-#include <boost/detail/lightweight_test.hpp>
 
-#include <edk/memory/one_size_free_entry.hpp>
+#include <sheol/lightweight_test.hpp>
+#include <sheol/memory/one_size_free_entry.hpp>
 
-using edk::memory::one_size_free_entry;
+using sheol::memory::one_size_free_entry;
 
 template <typename T>
 struct array_of_eight {
@@ -27,10 +27,10 @@ int main (void) {
   typedef one_size_free_entry<array_of_eight<boost::uint64_t> >
     osfe_64_bytes;
 
-  BOOST_TEST_EQ(std::size_t(osfe_16_bytes::object_size), std::size_t(16));
-  BOOST_TEST_EQ(std::size_t(osfe_32_bytes::object_size), std::size_t(32));
-  BOOST_TEST_EQ(std::size_t(osfe_64_bytes::object_size), std::size_t(64));
+  SHEOL_TEST_EQ(std::size_t(osfe_16_bytes::object_size), std::size_t(16));
+  SHEOL_TEST_EQ(std::size_t(osfe_32_bytes::object_size), std::size_t(32));
+  SHEOL_TEST_EQ(std::size_t(osfe_64_bytes::object_size), std::size_t(64));
 
-  return boost::report_errors();
+  return sheol::report_errors();
 }
 

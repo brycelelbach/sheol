@@ -5,15 +5,14 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(EDK_7F578F96_35D0_4D8F_B5D7_4F131BF74058)
-#define EDK_7F578F96_35D0_4D8F_B5D7_4F131BF74058
+#if !defined(SHEOL_7F578F96_35D0_4D8F_B5D7_4F131BF74058)
+#define SHEOL_7F578F96_35D0_4D8F_B5D7_4F131BF74058
 
-#include <edk/config/branch_hints.hpp>
-#include <edk/config/page_size.hpp>
+#include <sheol/config/branch_hints.hpp>
 
-// Defining this macro will allow polymorphic types to be used with edk
+// Defining this macro will allow polymorphic types to be used with sheol
 // allocators.
-// #define EDK_NO_POLYMORPHIC_PROTECTION
+// #define SHEOL_NO_POLYMORPHIC_PROTECTION
 
-#endif // EDK_7F578F96_35D0_4D8F_B5D7_4F131BF74058
+#endif // SHEOL_7F578F96_35D0_4D8F_B5D7_4F131BF74058
 

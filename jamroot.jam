@@ -9,7 +9,6 @@ import os ;
 import testing ;
 
 local BOOST_ROOT = [ os.environ BOOST_ROOT ] ;
-local BOOST_DETECT_ROOT = [ os.environ BOOST_DETECT_ROOT ] ;
 
 use-project /boost : $(BOOST_ROOT) ;
 
@@ -19,7 +18,6 @@ project
     <warnings>on
     <include>.
     <include>$(BOOST_ROOT)
-    <include>$(BOOST_DETECT_ROOT)
   : build-dir bin.v2
   ;
 

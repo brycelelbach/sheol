@@ -5,12 +5,12 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <boost/detail/lightweight_test.hpp>
 #include <boost/cstdint.hpp>
 
-#include <edk/memory/heapless_pool.hpp>
+#include <sheol/lightweight_test.hpp>
+#include <sheol/memory/heapless_pool.hpp>
 
-using edk::memory::heapless_pool;
+using sheol::memory::heapless_pool;
 
 namespace {
 
@@ -20,15 +20,15 @@ void test (void) {
   typedef heapless_pool<sizeof(T), 0x1000> pool;
 
   // Verify the initial state of the pool.
-  BOOST_TEST_EQ(pool::size(), 0U);
-  BOOST_TEST(pool::remaining() == pool::pool_size);
+  SHEOL_TEST_EQ(pool::size(), 0U);
+  SHEOL_TEST(pool::remaining() == pool::pool_size);
   
   // Make a bad allocation request.
-  BOOST_TEST_EQ(pool::allocate(0), reinterpret_cast<void*>(pool::invalid_count));
+  SHEOL_TEST_EQ(pool::allocate(0), reinterpret_cast<void*>(pool::invalid_count));
   
   // Make sure the bad allocation didn't mutate the pool data.
-  BOOST_TEST_EQ(pool::size(), 0U);
-  BOOST_TEST(pool::remaining() == pool::pool_size);
+  SHEOL_TEST_EQ(pool::size(), 0U);
+  SHEOL_TEST(pool::remaining() == pool::pool_size);
 }
 
 }
@@ -39,6 +39,6 @@ int main (void) {
   test<boost::uint32_t>();
   test<boost::uint64_t>();
 
-  return boost::report_errors();
+  return sheol::report_errors();
 }
 

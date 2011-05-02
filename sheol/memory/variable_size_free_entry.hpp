@@ -5,11 +5,10 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(EDK_6AD7A71C_0953_42B4_9DE0_4904CD20178B)
-#define EDK_6AD7A71C_0953_42B4_9DE0_4904CD20178B
+#if !defined(SHEOL_6AD7A71C_0953_42B4_9DE0_4904CD20178B)
+#define SHEOL_6AD7A71C_0953_42B4_9DE0_4904CD20178B
 
 #include <boost/config.hpp>
-#include <boost/detect/architecture.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/size_t.hpp>
 #include <boost/mpl/and.hpp>
@@ -18,20 +17,21 @@
 #include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
 
-#include <edk/config.hpp> 
+#include <sheol/config.hpp> 
+#include <sheol/detect/architecture.hpp>
  
-#if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
+#if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
   #include <boost/mpl/not.hpp>
   #include <boost/type_traits/is_polymorphic.hpp>
 #endif
 
-#if defined(BOOST_DETECT_X86_64_ARCHITECTURE)
-  #include <edk/tagged_ptr.hpp>
+#if defined(SHEOL_X86_64_ARCHITECTURE)
+  #include <sheol/tagged_ptr.hpp>
 #endif
 
-#include <edk/compile_time_assert.hpp> 
+#include <sheol/compile_time_assert.hpp> 
 
-namespace edk {
+namespace sheol {
 namespace memory {
 
 template <typename T, typename Enable = void>
@@ -39,7 +39,7 @@ struct variable_size_free_entry;
 
 template <typename T, typename Enable>
 struct variable_size_free_entry {
-  EDK_COMPILE_TIME_ASSERT(
+  SHEOL_COMPILE_TIME_ASSERT(
     (boost::mpl::less_equal<
       boost::mpl::size_t<sizeof(void*) * 2>,
       boost::mpl::size_t<sizeof(T)>
@@ -54,8 +54,8 @@ struct variable_size_free_entry<T, typename boost::enable_if<
     boost::mpl::size_t<sizeof(T)>
   >
 >::type> {
-  #if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
-    EDK_COMPILE_TIME_ASSERT(
+  #if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
+    SHEOL_COMPILE_TIME_ASSERT(
       boost::mpl::not_<boost::is_polymorphic<T> >::value,
       type_is_polymorphic, (T));
   #endif
@@ -166,7 +166,7 @@ struct variable_size_free_entry<T, typename boost::enable_if<
   { return ptr_ != 0; }
 };
 
-#if defined(BOOST_DETECT_X86_64_ARCHITECTURE)
+#if defined(SHEOL_X86_64_ARCHITECTURE)
   template <typename T>
   struct variable_size_free_entry<T, typename boost::enable_if<
     boost::mpl::and_<
@@ -180,13 +180,13 @@ struct variable_size_free_entry<T, typename boost::enable_if<
       >
     > 
   >::type> {
-    #if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
-      EDK_COMPILE_TIME_ASSERT(
+    #if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
+      SHEOL_COMPILE_TIME_ASSERT(
         boost::mpl::not_<boost::is_polymorphic<T> >::value,
         type_is_polymorphic, (T, boost::mpl::size_t<sizeof(T)>));
     #endif
 
-    typedef edk::tagged_ptr<variable_size_free_entry> tagged_ptr_type;
+    typedef sheol::tagged_ptr<variable_size_free_entry> tagged_ptr_type;
 
     // This is only a word.
     typedef typename tagged_ptr_type::tag_type size_type;
@@ -297,7 +297,7 @@ struct variable_size_free_entry<T, typename boost::enable_if<
 #endif
 
 } // memory
-} // edk
+} // sheol
 
-#endif // EDK_6AD7A71C_0953_42B4_9DE0_4904CD20178B
+#endif // SHEOL_6AD7A71C_0953_42B4_9DE0_4904CD20178B
 

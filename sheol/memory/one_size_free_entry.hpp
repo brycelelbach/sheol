@@ -5,8 +5,8 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(EDK_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4)
-#define EDK_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4
+#if !defined(SHEOL_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4)
+#define SHEOL_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4
 
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
@@ -16,16 +16,16 @@
 #include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
 
-#include <edk/config.hpp> 
+#include <sheol/config.hpp> 
  
-#if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
+#if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
   #include <boost/mpl/not.hpp>
   #include <boost/type_traits/is_polymorphic.hpp>
 #endif
 
-#include <edk/compile_time_assert.hpp> 
+#include <sheol/compile_time_assert.hpp> 
 
-namespace edk {
+namespace sheol {
 namespace memory {
 
 template <typename T, typename Enable = void>
@@ -33,15 +33,15 @@ struct one_size_free_entry;
 
 template <typename T, typename Enable>
 struct one_size_free_entry {
-  EDK_COMPILE_TIME_ASSERT(
+  SHEOL_COMPILE_TIME_ASSERT(
     (boost::mpl::less_equal<
       boost::mpl::size_t<sizeof(void*)>,
       boost::mpl::size_t<sizeof(T)>
     >::value),
     type_is_to_small, (T, boost::mpl::size_t<sizeof(T)>));
   
-  #if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
-    EDK_COMPILE_TIME_ASSERT(
+  #if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
+    SHEOL_COMPILE_TIME_ASSERT(
       boost::mpl::not_<boost::is_polymorphic<T> >::value,
       type_is_polymorphic, (T));
   #endif
@@ -137,7 +137,7 @@ struct one_size_free_entry {
 };
 
 } // memory
-} // edk
+} // sheol
 
-#endif // EDK_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4
+#endif // SHEOL_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4
 

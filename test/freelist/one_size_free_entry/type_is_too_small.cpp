@@ -6,10 +6,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <boost/cstdint.hpp>
+#include <sheol/memory/one_size_free_entry.hpp>
 
-#include <edk/memory/one_size_free_entry.hpp>
-
-using edk::memory::one_size_free_entry;
+using sheol::memory::one_size_free_entry;
 
 int main (void) {
   typedef one_size_free_entry<boost::uint8_t> byte_entry;

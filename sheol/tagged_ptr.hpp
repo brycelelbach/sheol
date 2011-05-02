@@ -6,20 +6,20 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(EDK_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599)
-#define EDK_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599
+#if !defined(SHEOL_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599)
+#define SHEOL_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599
 
-#include <boost/detect/architecture.hpp>
+#include <sheol/detect/architecture.hpp>
 
-#if defined(BOOST_DETECT_X86_64_ARCHITECTURE)
-  #include <edk/config.hpp>
+#if defined(SHEOL_X86_64_ARCHITECTURE)
+  #include <sheol/config.hpp>
 
   #include <stddef.h>
 
   #include <boost/config.hpp>
   #include <boost/cstdint.hpp>
 
-  namespace edk {
+  namespace sheol {
 
   template <typename T>
   struct tagged_ptr {
@@ -32,8 +32,8 @@
       tag_type tag[4];
     };
 
-    BOOST_STATIC_CONSTANT(std::size_t, tag_index = 3);
-    BOOST_STATIC_CONSTANT(compressed_ptr_type, ptr_mask = 0xffffffffffff);
+    enum { tag_index = 3 };
+    enum { ptr_mask = 0xffffffffffff };
 
     static T* extract_ptr (volatile compressed_ptr_type const& i)
     { return reinterpret_cast<T*>(i & ptr_mask); }
@@ -112,10 +112,10 @@
     compressed_ptr_type ptr;
   };
 
-  } // edk 
+  } // sheol 
 #else
-    #error Unsupported platform
+  #error Unsupported platform
 #endif
 
-#endif // EDK_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599
+#endif // SHEOL_DEEA4A9D_C2E8_4EB4_8C6C_CC7A5CDA5599
 

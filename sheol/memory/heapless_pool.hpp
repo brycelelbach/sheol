@@ -6,8 +6,8 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(EDK_0701C127_B570_4CDC_8DC0_226B8A2E4035)
-#define EDK_0701C127_B570_4CDC_8DC0_226B8A2E4035
+#if !defined(SHEOL_0701C127_B570_4CDC_8DC0_226B8A2E4035)
+#define SHEOL_0701C127_B570_4CDC_8DC0_226B8A2E4035
 
 #include <limits.h>
 
@@ -20,17 +20,17 @@
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/modulus.hpp>
 
-#include <edk/compile_time_assert.hpp>
-#include <edk/config.hpp>
+#include <sheol/compile_time_assert.hpp>
+#include <sheol/config.hpp>
 
-namespace edk {
+namespace sheol {
 namespace memory {
 
 template<std::size_t ObjectSize,
-         std::size_t Capacity = (1 << 8) * EDK_PAGE_SIZE * ObjectSize,
+         std::size_t Capacity = (1 << 8) * 0x1000 * ObjectSize,
          std::size_t ID = ObjectSize>
 struct heapless_pool {
-  EDK_COMPILE_TIME_ASSERT(
+  SHEOL_COMPILE_TIME_ASSERT(
     (boost::mpl::less<
       boost::mpl::size_t<ObjectSize>,
       boost::mpl::size_t<Capacity>
@@ -38,7 +38,7 @@ struct heapless_pool {
     object_size_is_larger_than_capacity,
     (boost::mpl::size_t<ObjectSize>, boost::mpl::size_t<Capacity>));
   
-  EDK_COMPILE_TIME_ASSERT(
+  SHEOL_COMPILE_TIME_ASSERT(
     (boost::mpl::equal_to<
       boost::mpl::modulus<
         boost::mpl::size_t<Capacity>,
@@ -68,12 +68,12 @@ struct heapless_pool {
   // Allocates 'count' objects. Returns 'invalid_count' if count is zero, and
   // returns 'out_of_memory' if the pool is exhausted.
   static void* allocate (size_type count = 1) {
-    if (EDK_UNLIKELY(count == 0))
+    if (SHEOL_UNLIKELY(count == 0))
       return reinterpret_cast<void*>(invalid_count);
  
     byte_type* new_next = next + (count * ObjectSize);
  
-    if (EDK_UNLIKELY(new_next > end))
+    if (SHEOL_UNLIKELY(new_next > end))
       return reinterpret_cast<void*>(out_of_memory); 
  
     void* mem = reinterpret_cast<void*>(next);
@@ -136,7 +136,7 @@ heapless_pool<ObjectSize, Capacity, ID>::next
   = heapless_pool<ObjectSize, Capacity, ID>::first;
 
 } // memory
-} // edk
+} // sheol
 
-#endif // EDK_0701C127_B570_4CDC_8DC0_226B8A2E4035
+#endif // SHEOL_0701C127_B570_4CDC_8DC0_226B8A2E4035
 
