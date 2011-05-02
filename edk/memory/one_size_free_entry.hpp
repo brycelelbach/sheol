@@ -12,14 +12,14 @@
 #include <boost/assert.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/size_t.hpp>
-#include <boost/mpl/less.hpp>
-#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/less_equal.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
 
 #include <edk/config.hpp> 
  
 #if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
+  #include <boost/mpl/not.hpp>
   #include <boost/type_traits/is_polymorphic.hpp>
 #endif
 
@@ -34,7 +34,7 @@ struct one_size_free_entry;
 template <typename T, typename Enable>
 struct one_size_free_entry {
   EDK_COMPILE_TIME_ASSERT(
-    (boost::mpl::less<
+    (boost::mpl::less_equal<
       boost::mpl::size_t<sizeof(void*)>,
       boost::mpl::size_t<sizeof(T)>
     >::value),

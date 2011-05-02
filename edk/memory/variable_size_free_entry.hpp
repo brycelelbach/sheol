@@ -12,14 +12,16 @@
 #include <boost/detect/architecture.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/size_t.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/mpl/less.hpp>
-#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/less_equal.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
 
 #include <edk/config.hpp> 
  
 #if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
+  #include <boost/mpl/not.hpp>
   #include <boost/type_traits/is_polymorphic.hpp>
 #endif
 
@@ -38,12 +40,20 @@ struct variable_size_free_entry;
 template <typename T, typename Enable>
 struct variable_size_free_entry {
   EDK_COMPILE_TIME_ASSERT(
-    (boost::mpl::less<
+    (boost::mpl::less_equal<
       boost::mpl::size_t<sizeof(void*) * 2>,
       boost::mpl::size_t<sizeof(T)>
     >::value),
     type_is_to_small, (T, boost::mpl::size_t<sizeof(T)>));
-  
+};
+
+template <typename T>
+struct variable_size_free_entry<T, typename boost::enable_if<
+  boost::mpl::less_equal<
+    boost::mpl::size_t<sizeof(void*) * 2>,
+    boost::mpl::size_t<sizeof(T)>
+  >
+>::type> {
   #if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
     EDK_COMPILE_TIME_ASSERT(
       boost::mpl::not_<boost::is_polymorphic<T> >::value,
@@ -53,7 +63,7 @@ struct variable_size_free_entry {
   typedef std::size_t size_type;
 
   enum { object_size = sizeof(T) };
-    
+
   enum { maximum_array_size = boost::integer_traits<size_type>::const_max };
 
  private:
@@ -159,10 +169,16 @@ struct variable_size_free_entry {
 #if defined(BOOST_DETECT_X86_64_ARCHITECTURE)
   template <typename T>
   struct variable_size_free_entry<T, typename boost::enable_if<
-    boost::mpl::less<
-      boost::mpl::size_t<sizeof(void*)>,
-      boost::mpl::size_t<sizeof(T)>
-    >
+    boost::mpl::and_<
+      boost::mpl::less_equal<
+        boost::mpl::size_t<sizeof(void*)>,
+        boost::mpl::size_t<sizeof(T)>
+      >,
+      boost::mpl::less<
+        boost::mpl::size_t<sizeof(T)>,
+        boost::mpl::size_t<sizeof(void*) * 2>
+      >
+    > 
   >::type> {
     #if !defined(EDK_NO_POLYMORPHIC_PROTECTION)
       EDK_COMPILE_TIME_ASSERT(

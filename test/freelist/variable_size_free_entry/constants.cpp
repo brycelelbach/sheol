@@ -31,5 +31,12 @@ int main (void) {
   BOOST_TEST_EQ(std::size_t(vsfe_32_bytes::object_size), std::size_t(32));
   BOOST_TEST_EQ(std::size_t(vsfe_64_bytes::object_size), std::size_t(64));
 
+  BOOST_TEST_EQ(vsfe_16_bytes::size_type(vsfe_16_bytes::maximum_array_size),
+                boost::integer_traits<vsfe_16_bytes::size_type>::const_max);
+  BOOST_TEST_EQ(vsfe_32_bytes::size_type(vsfe_32_bytes::maximum_array_size),
+                boost::integer_traits<vsfe_32_bytes::size_type>::const_max);
+  BOOST_TEST_EQ(vsfe_64_bytes::size_type(vsfe_64_bytes::maximum_array_size),
+                boost::integer_traits<vsfe_64_bytes::size_type>::const_max);
+
   return boost::report_errors();
 }
