@@ -35,10 +35,10 @@
     enum { tag_index = 3 };
     enum { ptr_mask = 0xffffffffffff };
 
-    static T* extract_ptr (volatile compressed_ptr_type const& i)
+    static T* extract_ptr (compressed_ptr_type volatile const& i)
     { return reinterpret_cast<T*>(i & ptr_mask); }
 
-    static tag_type extract_tag (volatile compressed_ptr_type const& i) {
+    static tag_type extract_tag (compressed_ptr_type volatile const& i) {
       cast_unit cu;
       cu.value = i;
       return cu.tag[tag_index];
@@ -54,24 +54,39 @@
    public:
     tagged_ptr (void): ptr(0) {}
 
-    tagged_ptr (tagged_ptr const& p): ptr(p.ptr) {}
+    tagged_ptr (tagged_ptr volatile& p): ptr(p.ptr) {}
 
     explicit tagged_ptr (T* p): ptr(pack_ptr(p, 0)) {}
 
     tagged_ptr (T* p, tag_type t): ptr(pack_ptr(p, t)) {}
 
-    tagged_ptr& operator= (tagged_ptr const& p) {
+    tagged_ptr& operator= (tagged_ptr volatile& p) {
       ptr = p.ptr;
       return *this;
     }
+    
+    tagged_ptr volatile& operator= (tagged_ptr volatile& p) volatile {
+      ptr = p.ptr;
+      return *this;
+    }
+    
+    tagged_ptr& operator= (T* p) {
+      reset(p);
+      return *this;
+    }
+    
+    tagged_ptr volatile& operator= (T* p) volatile {
+      reset(p);
+      return *this;
+    }
 
-    void reset (T* p, tag_type t)
+    void reset (T* p, tag_type t = 0) volatile
     { ptr = pack_ptr(p, t); }
 
-    bool operator== (volatile tagged_ptr const& p) const
+    bool operator== (tagged_ptr volatile const& p) const volatile
     { return (ptr == p.ptr); }
 
-    bool operator!= (volatile tagged_ptr const& p) const
+    bool operator!= (tagged_ptr volatile const& p) const volatile
     { return !operator==(p); }
 
     T const* get_ptr (void) const volatile
@@ -89,23 +104,23 @@
     { return extract_tag(ptr); }
 
     void set_tag (tag_type t) volatile {
-      T * p = get_ptr();
+      T* p = get_ptr();
       ptr = pack_ptr(p, t);
     }
 
-    T const& operator* (void) const
+    T const& operator* (void) const volatile
     { return *get_ptr(); }
 
-    T& operator* (void)
+    T& operator* (void) volatile
     { return *get_ptr(); }
 
-    T const* operator-> (void) const
+    T const* operator-> (void) const volatile
     { return get_ptr(); }
 
-    T* operator-> (void) 
+    T* operator-> (void) volatile
     { return get_ptr(); }
 
-    operator bool (void) const
+    operator bool (void) const volatile
     { return get_ptr() != 0; }
 
    private:

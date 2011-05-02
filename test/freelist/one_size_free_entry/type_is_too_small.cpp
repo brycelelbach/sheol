@@ -6,14 +6,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <boost/cstdint.hpp>
+
 #include <sheol/memory/one_size_free_entry.hpp>
 
 using sheol::memory::one_size_free_entry;
 
 int main (void) {
-  typedef one_size_free_entry<boost::uint8_t> byte_entry;
-
-  byte_entry entry;
+  one_size_free_entry<boost::uint8_t> entry;
 
   return 0;
 }

@@ -27,12 +27,13 @@ void test (void) {
     SHEOL_TEST_EQ(osfe.get(), reinterpret_cast<osfe_type*>(0xbeef));
     SHEOL_TEST_EQ(osfe.retrieve(), reinterpret_cast<T*>(0xbeef));
 
-    osfe = osfe_type(reinterpret_cast<void*>(0xdead));
+    osfe_type other(reinterpret_cast<T*>(0xdead));
+    osfe = other;
 
     SHEOL_TEST_EQ(osfe.get(), reinterpret_cast<osfe_type*>(0xdead));
     SHEOL_TEST_EQ(osfe.retrieve(), reinterpret_cast<T*>(0xdead));
 
-    osfe = reinterpret_cast<void*>(0xbeef);
+    osfe = reinterpret_cast<T*>(0xbeef);
 
     SHEOL_TEST_EQ(osfe.get(), reinterpret_cast<osfe_type*>(0xbeef));
     SHEOL_TEST_EQ(osfe.retrieve(), reinterpret_cast<T*>(0xbeef));

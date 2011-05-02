@@ -5,14 +5,24 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <boost/cstdint.hpp>
+#include <sheol/lightweight_test.hpp>
+#include <sheol/detect/architecture.hpp>
 
-#include <sheol/memory/variable_size_free_entry.hpp>
+#if defined(SHEOL_X86_64_ARCHITECTURE)
+  #include <sheol/tagged_ptr.hpp>
 
-using sheol::memory::variable_size_free_entry;
+  using sheol::tagged_ptr;
+#endif
+
 
 int main (void) {
-  variable_size_free_entry<boost::uint8_t> entry;
+  #if defined(SHEOL_X86_64_ARCHITECTURE)
+    int a(1);
+
+    tagged_ptr<int> i(tagged_ptr<int>(&a, 0));
+  #else
+    #error Architecture not supported.
+  #endif
 
   return 0;
 }

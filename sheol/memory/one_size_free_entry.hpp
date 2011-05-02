@@ -5,25 +5,10 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(SHEOL_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4)
-#define SHEOL_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4
+#if !defined(SHEOL_651FADDA_14B8_4443_9F84_144460121BAD)
+#define SHEOL_651FADDA_14B8_4443_9F84_144460121BAD
 
-#include <boost/config.hpp>
-#include <boost/assert.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/size_t.hpp>
-#include <boost/mpl/less_equal.hpp>
-#include <boost/cstdint.hpp>
-#include <boost/integer_traits.hpp>
-
-#include <sheol/config.hpp> 
- 
-#if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
-  #include <boost/mpl/not.hpp>
-  #include <boost/type_traits/is_polymorphic.hpp>
-#endif
-
-#include <sheol/compile_time_assert.hpp> 
+#include <sheol/memory/pod_one_size_free_entry.hpp> 
 
 namespace sheol {
 namespace memory {
@@ -32,112 +17,48 @@ template <typename T, typename Enable = void>
 struct one_size_free_entry;
 
 template <typename T, typename Enable>
-struct one_size_free_entry {
-  SHEOL_COMPILE_TIME_ASSERT(
-    (boost::mpl::less_equal<
-      boost::mpl::size_t<sizeof(void*)>,
-      boost::mpl::size_t<sizeof(T)>
-    >::value),
-    type_is_to_small, (T, boost::mpl::size_t<sizeof(T)>));
-  
-  #if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
-    SHEOL_COMPILE_TIME_ASSERT(
-      boost::mpl::not_<boost::is_polymorphic<T> >::value,
-      type_is_polymorphic, (T));
-  #endif
+struct one_size_free_entry: pod_one_size_free_entry<T> {
+  typedef pod_one_size_free_entry<T> base_type;
 
-  typedef std::size_t size_type;
-
-  enum { object_size = sizeof(T) };
-    
  private:
-  one_size_free_entry* ptr_;
+  // Adjust access to the data.
+  using base_type::data;
 
  public:
-  one_size_free_entry (void): ptr_(0) { }
+  one_size_free_entry (void) {
+    base_type::reset();
+  }
   
-  explicit one_size_free_entry (one_size_free_entry* p) {
-    reset(p);
+  one_size_free_entry (base_type* p) {
+    base_type::reset(p);
   }
 
-  explicit one_size_free_entry (void* p) {
-    reset(p);
-  }
-  
   explicit one_size_free_entry (T* p) {
-    reset(p);
+    base_type::reset(p);
   }
   
-  one_size_free_entry (one_size_free_entry const& other): ptr_(other.ptr_) { } 
+  one_size_free_entry (base_type& other) {
+    base_type::reset(other.get());
+  } 
   
-  one_size_free_entry& operator= (one_size_free_entry const& other) {
-    ptr_ = other.ptr_;
+  one_size_free_entry& operator= (base_type& other) {
+    base_type::reset(other.get());
     return *this;
   }
   
-  one_size_free_entry& operator= (one_size_free_entry* p) {
-    reset(p);
-    return *this;
-  }
-  
-  one_size_free_entry& operator= (void* p) {
-    reset(p);
+  one_size_free_entry& operator= (base_type* p) {
+    base_type::reset(p);
     return *this;
   }
 
   one_size_free_entry& operator= (T* p) {
-    reset(p);
+    base_type::reset(p);
     return *this;
   }
-
-  void reset (one_size_free_entry* p = 0) {
-    ptr_ = p; 
-  }
-  
-  void reset (void* p) {
-    ptr_ = reinterpret_cast<one_size_free_entry*>(p);
-  }
-
-  void reset (T* p) {
-    ptr_ = reinterpret_cast<one_size_free_entry*>(p);
-  } 
-
-  one_size_free_entry const& operator* (void) const
-  { return *ptr_; }
-
-  one_size_free_entry& operator* (void)
-  { return *ptr_; }
-
-  one_size_free_entry const* operator-> (void) const
-  { return ptr_; }
-
-  one_size_free_entry* operator-> (void) 
-  { return ptr_; }
-
-  one_size_free_entry const* get (void) const
-  { return ptr_; }
-
-  one_size_free_entry* get (void) 
-  { return ptr_; }
-  
-  T const* retrieve (void) const
-  { return reinterpret_cast<T const*>(get()); }
-  
-  T* retrieve (void) 
-  { return reinterpret_cast<T*>(get()); }
-
-  bool operator== (one_size_free_entry const& rhs) const
-  { return (ptr_ == rhs.ptr_); }
-
-  bool operator!= (one_size_free_entry const& rhs) const
-  { return !(*this == rhs); } 
-    
-  operator bool (void) const
-  { return ptr_ != 0; }
 };
 
 } // memory
 } // sheol
 
-#endif // SHEOL_6D54A860_A56A_484B_AF0E_1DCFB3BB1EA4
+#endif // SHEOL_651FADDA_14B8_4443_9F84_144460121BAD
 

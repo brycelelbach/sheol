@@ -8,12 +8,26 @@
 project ;
 
 run freelist/one_size_free_entry/constants.cpp : : : : osfe_constants ; 
-run freelist/one_size_free_entry/basic.cpp : : : : osfe_basic ; 
+run freelist/one_size_free_entry/basics.cpp : : : : osfe_basics ; 
+run freelist/one_size_free_entry/comparisons.cpp : : : : osfe_comparisons ; 
 compile-fail freelist/one_size_free_entry/type_is_too_small.cpp : : osfe_type_is_too_small ;
+compile-fail freelist/one_size_free_entry/illegal_access.cpp : : osfe_illegal_access ;
+
 run freelist/variable_size_free_entry/constants.cpp : : : : vsfe_constants ; 
-run freelist/variable_size_free_entry/basic.cpp : : : : vsfe_basic ; 
+run freelist/variable_size_free_entry/basics.cpp : : : : vsfe_basics ; 
+run freelist/variable_size_free_entry/comparisons.cpp : : : : vsfe_comparisons ; 
 compile-fail freelist/variable_size_free_entry/type_is_too_small.cpp : : vsfe_type_is_too_small ;
-run tagged_ptr.cpp ;
+compile-fail freelist/variable_size_free_entry/illegal_access.cpp : : vsfe_illegal_access ;
+
+run tagged_ptr/basics.cpp : : : : tagged_ptr_basics ;
+run tagged_ptr/comparisons.cpp : : : : tagged_ptr_comparisons ;
+compile-fail tagged_ptr/no_const_ptr_assignment.cpp : : tagged_ptr_no_const_ptr_assignment ;
+compile-fail tagged_ptr/no_const_ptr_ctor.cpp : : tagged_ptr_no_const_ptr_ctor ;
+compile-fail tagged_ptr/no_const_ref_copy_assignment.cpp : : tagged_ptr_no_const_ref_copy_assignment ;
+compile-fail tagged_ptr/no_const_ref_copy_ctor.cpp : : tagged_ptr_no_const_ref_copy_ctor ;
+compile-fail tagged_ptr/no_temp_copy_assignment.cpp : : tagged_ptr_no_temp_copy_assignment ;
+compile-fail tagged_ptr/no_temp_copy_ctor.cpp : : tagged_ptr_no_temp_copy_ctor ;
+
 run heapless_pool/constants.cpp : : : : heapless_pool_constants ;
 run heapless_pool/allocate_objects.cpp ;
 run heapless_pool/allocate_arrays.cpp ;
