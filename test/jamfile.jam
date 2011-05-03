@@ -35,12 +35,12 @@ compile-fail tagged_ptr/no_const_ref_copy_ctor.cpp : : tagged_ptr_no_const_ref_c
 compile-fail tagged_ptr/no_temp_copy_assignment.cpp : : tagged_ptr_no_temp_copy_assignment ;
 compile-fail tagged_ptr/no_temp_copy_ctor.cpp : : tagged_ptr_no_temp_copy_ctor ;
 
-run heapless_pool/constants.cpp : : : : heapless_pool_constants ;
-run heapless_pool/allocate_objects.cpp ;
-run heapless_pool/allocate_arrays.cpp ;
-run heapless_pool/invalid_count.cpp ;
-run heapless_pool/out_of_memory.cpp ;
-run heapless_pool/owns.cpp ;
-compile-fail heapless_pool/capacity_not_divisible_by_object_size.cpp ;
-compile-fail heapless_pool/object_size_larger_than_capacity.cpp ;
+run heapless_partition/constants.cpp : : : : heapless_partition_constants ;
+run heapless_partition/allocate_objects.cpp ;
+run heapless_partition/allocate_arrays.cpp ;
+run heapless_partition/invalid_count.cpp ;
+run heapless_partition/out_of_memory.cpp ;
+run heapless_partition/owns.cpp ;
+compile-fail heapless_partition/capacity_not_divisible_by_object_size.cpp ;
+compile-fail heapless_partition/object_size_larger_than_capacity.cpp ;
 

@@ -5,16 +5,16 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <sheol/memory/heapless_pool.hpp>
+#include <sheol/memory/heapless_partition.hpp>
 
-using sheol::memory::heapless_pool;
+using sheol::memory::heapless_partition;
 
 int main (void) {
-  typedef heapless_pool<5, 0x1000> pool;
+  typedef heapless_partition<64, 8> partition;
 
-  // instantiate the pool
+  // instantiate the partition
   void* p = 0;
-  p = pool::allocate(); 
+  p = partition::allocate(); 
 
   return 0;
 }

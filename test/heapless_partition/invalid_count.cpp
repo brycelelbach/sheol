@@ -8,27 +8,28 @@
 #include <boost/cstdint.hpp>
 
 #include <sheol/lightweight_test.hpp>
-#include <sheol/memory/heapless_pool.hpp>
+#include <sheol/memory/heapless_partition.hpp>
 
-using sheol::memory::heapless_pool;
+using sheol::memory::heapless_partition;
 
 namespace {
 
 template <typename T>
 void test (void) {
   // On most x86 systems, the (smallest) page size is 4 kilobytes.
-  typedef heapless_pool<sizeof(T), 0x1000> pool;
+  typedef heapless_partition<sizeof(T), 0x1000> partition;
 
-  // Verify the initial state of the pool.
-  SHEOL_TEST_EQ(pool::size(), 0U);
-  SHEOL_TEST(pool::remaining() == pool::pool_size);
+  // Verify the initial state of the partition.
+  SHEOL_TEST_EQ(partition::size(), 0U);
+  SHEOL_TEST(partition::remaining() == partition::partition_size);
   
   // Make a bad allocation request.
-  SHEOL_TEST_EQ(pool::allocate(0), reinterpret_cast<void*>(pool::invalid_count));
+  SHEOL_TEST_EQ(partition::allocate(0),
+    reinterpret_cast<void*>(partition::invalid_count));
   
-  // Make sure the bad allocation didn't mutate the pool data.
-  SHEOL_TEST_EQ(pool::size(), 0U);
-  SHEOL_TEST(pool::remaining() == pool::pool_size);
+  // Make sure the bad allocation didn't mutate the partition data.
+  SHEOL_TEST_EQ(partition::size(), 0U);
+  SHEOL_TEST(partition::remaining() == partition::partition_size);
 }
 
 }

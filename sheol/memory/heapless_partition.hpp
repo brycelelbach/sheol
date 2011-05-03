@@ -29,7 +29,7 @@ namespace memory {
 template<std::size_t ObjectSize,
          std::size_t Capacity = (1 << 8) * 0x1000 * ObjectSize,
          std::size_t ID = ObjectSize>
-struct heapless_pool {
+struct heapless_partition {
   SHEOL_COMPILE_TIME_ASSERT(
     (boost::mpl::less<
       boost::mpl::size_t<ObjectSize>,
@@ -56,17 +56,17 @@ struct heapless_pool {
   enum { invalid_count = -1 };
   enum { out_of_memory = 0 };
 
-  // Object size of this pool, in bytes.
+  // Object size of this partition, in bytes.
   enum { object_size = ObjectSize };
 
-  // Capacity of this pool, in bytes.
+  // Capacity of this partition, in bytes.
   enum { capacity = Capacity };
 
-  // Maximum number of objects that this pool can allocate.
-  enum { pool_size = Capacity / ObjectSize };
+  // Maximum number of objects that this partition can allocate.
+  enum { partition_size = Capacity / ObjectSize };
 
   // Allocates 'count' objects. Returns 'invalid_count' if count is zero, and
-  // returns 'out_of_memory' if the pool is exhausted.
+  // returns 'out_of_memory' if the partition is exhausted.
   static void* allocate (size_type count = 1) {
     if (SHEOL_UNLIKELY(count == 0))
       return reinterpret_cast<void*>(invalid_count);
@@ -81,12 +81,12 @@ struct heapless_pool {
     return mem; 
   }
 
-  // Returns the number of objects that this pool has allocated.
+  // Returns the number of objects that this partition has allocated.
   static size_type size (void) {
     return static_cast<size_type>((next - buffer) / ObjectSize);
   }
 
-  // Returns the number of objects that this pool can allocate. 
+  // Returns the number of objects that this partition can allocate. 
   static size_type remaining (void) {
     return static_cast<size_type>((end - next) / ObjectSize);
   }
@@ -117,23 +117,23 @@ struct heapless_pool {
 };
 
 template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
-typename heapless_pool<ObjectSize, Capacity, ID>::byte_type
-heapless_pool<ObjectSize, Capacity, ID>::buffer[Capacity];
+typename heapless_partition<ObjectSize, Capacity, ID>::byte_type
+heapless_partition<ObjectSize, Capacity, ID>::buffer[Capacity];
 
 template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
-typename heapless_pool<ObjectSize, Capacity, ID>::byte_type* const
-heapless_pool<ObjectSize, Capacity, ID>::first 
-  = &heapless_pool<ObjectSize, Capacity, ID>::buffer[0];
+typename heapless_partition<ObjectSize, Capacity, ID>::byte_type* const
+heapless_partition<ObjectSize, Capacity, ID>::first 
+  = &heapless_partition<ObjectSize, Capacity, ID>::buffer[0];
 
 template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
-typename heapless_pool<ObjectSize, Capacity, ID>::byte_type* const
-heapless_pool<ObjectSize, Capacity, ID>::end 
-  = &heapless_pool<ObjectSize, Capacity, ID>::buffer[Capacity];
+typename heapless_partition<ObjectSize, Capacity, ID>::byte_type* const
+heapless_partition<ObjectSize, Capacity, ID>::end 
+  = &heapless_partition<ObjectSize, Capacity, ID>::buffer[Capacity];
 
 template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
-typename heapless_pool<ObjectSize, Capacity, ID>::byte_type*
-heapless_pool<ObjectSize, Capacity, ID>::next 
-  = heapless_pool<ObjectSize, Capacity, ID>::first;
+typename heapless_partition<ObjectSize, Capacity, ID>::byte_type*
+heapless_partition<ObjectSize, Capacity, ID>::next 
+  = heapless_partition<ObjectSize, Capacity, ID>::first;
 
 } // memory
 } // sheol
