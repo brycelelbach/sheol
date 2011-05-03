@@ -1,0 +1,13 @@
+template <typename T>
+struct freelist {
+  typedef unspecified size_type;
+ 
+  enum { object_size = unspecified };
+
+  T* allocate (void);
+
+  void reserve (size_type);
+
+  void recycle (T*);
+};
+
