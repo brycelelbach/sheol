@@ -20,7 +20,7 @@
 
 int main (void) {
   #if defined(SHEOL_X86_64_ARCHITECTURE)
-    SHEOL_SANITY(!boost::is_pod<tagged_ptr<int> >::value);
+    SHEOL_TEST(!boost::is_pod<tagged_ptr<int> >::value);
     SHEOL_TEST(boost::is_pod<pod_tagged_ptr<int> >::value);
   #endif
 

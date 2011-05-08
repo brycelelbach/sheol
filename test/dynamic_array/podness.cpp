@@ -5,19 +5,17 @@
 //  file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <sheol/lightweight_test.hpp>
+#include <sheol/adt/dynamic_array.hpp>
+
 #include <boost/type_traits/is_pod.hpp>
 
-#include <sheol/lightweight_test.hpp>
-#include <sheol/memory/one_size_free_entry.hpp>
-
-using sheol::memory::one_size_free_entry;
-using sheol::memory::pod_one_size_free_entry;
+using sheol::adt::dynamic_array;
+using sheol::adt::pod_dynamic_array;
 
 int main (void) {
-  SHEOL_TEST(!boost::is_pod<one_size_free_entry<void*> >::value);
-  SHEOL_TEST(boost::is_pod<pod_one_size_free_entry<void*> >::value);
-  SHEOL_TEST(!boost::is_pod<one_size_free_entry<void*[2]> >::value);
-  SHEOL_TEST(boost::is_pod<pod_one_size_free_entry<void*[2]> >::value);
+  SHEOL_TEST(!boost::is_pod<dynamic_array<int> >::value);
+  SHEOL_TEST(boost::is_pod<pod_dynamic_array<int> >::value);
 
   return sheol::report_errors();
 }

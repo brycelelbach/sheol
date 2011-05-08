@@ -12,6 +12,13 @@
 #include <sheol/config/manual_profiling.hpp>
 #include <sheol/config/unused.hpp>
 
+// Including <cstddef> without C++0x support enabled offends GNU's standard
+// library. These using statements won't cause problems if <cstddef> is
+// included by the user, so they're harmless for compilers that don't use
+// libstdc++
+#include <stddef.h>
+namespace std { using ::ptrdiff_t; using ::size_t; }
+
 // Defining this macro will allow polymorphic types to be used with sheol
 // allocators.
 // #define SHEOL_NO_POLYMORPHIC_PROTECTION

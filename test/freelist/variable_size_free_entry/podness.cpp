@@ -14,10 +14,10 @@ using sheol::memory::variable_size_free_entry;
 using sheol::memory::pod_variable_size_free_entry;
 
 int main (void) {
-  SHEOL_SANITY(!boost::is_pod<variable_size_free_entry<void*[2]> >::value);
+  SHEOL_TEST(!boost::is_pod<variable_size_free_entry<void*[2]> >::value);
   SHEOL_TEST(boost::is_pod<pod_variable_size_free_entry<void*[2]> >::value);
   #if defined(SHEOL_X86_64_ARCHITECTURE)
-    SHEOL_SANITY(!boost::is_pod<variable_size_free_entry<void*> >::value);
+    SHEOL_TEST(!boost::is_pod<variable_size_free_entry<void*> >::value);
     SHEOL_TEST(boost::is_pod<pod_variable_size_free_entry<void*> >::value);
   #endif
 

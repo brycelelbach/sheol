@@ -43,17 +43,7 @@
       return *this;
     }
     
-    tagged_ptr volatile& operator= (tagged_ptr& other) volatile {
-      base_type::reset(other.get_ptr(), other.get_tag());
-      return *this;
-    }
-    
     tagged_ptr& operator= (T* p) {
-      base_type::reset(p);
-      return *this;
-    }
-    
-    tagged_ptr volatile& operator= (T* p) volatile {
       base_type::reset(p);
       return *this;
     }
