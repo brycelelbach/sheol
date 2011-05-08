@@ -49,7 +49,7 @@ template<typename T>
 struct pod_doubly_linked_list_iterator: public boost::iterator_facade<
   pod_doubly_linked_list_iterator<T>, T, boost::bidirectional_traversal_tag
 > {
-  typedef typename mpl::if_<
+  typedef typename boost::mpl::if_<
     boost::is_const<T>,
     pod_doubly_linked_list_node<typename boost::remove_const<T>::type> const,
     pod_doubly_linked_list_node<T>
@@ -75,7 +75,7 @@ struct pod_doubly_linked_list_iterator: public boost::iterator_facade<
   }
 
   template <typename Iterator>
-  bool equal (Iterator const& curr) const {
+  bool equal (Iterator const& other) const {
     return curr == other.curr;
   }
 
@@ -273,6 +273,9 @@ struct pod_doubly_linked_list {
   node_type* first;
   node_type* last;
 };
+
+} // adt
+} // sheol
 
 #endif // SHEOL_3CAF1ACA_C212_4FA5_AB0A_CD511F24E24B
  
