@@ -33,6 +33,8 @@ run dynamic_array/copy.cpp : : : : dynamic_array_copy ;
 run dynamic_array/podness.cpp : : : : dynamic_array_podness ;
 run dynamic_array/stress.cpp : : : : dynamic_array_stress ;
 
+run doubly_linked_list/podness.cpp : : : : doubly_linked_list_podness ;
+
 run tagged_ptr/basics.cpp : : : : tagged_ptr_basics ;
 run tagged_ptr/comparisons.cpp : : : : tagged_ptr_comparisons ;
 run tagged_ptr/podness.cpp : : : : tagged_ptr_podness ;

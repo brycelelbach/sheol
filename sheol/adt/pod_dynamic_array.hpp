@@ -13,6 +13,7 @@
 #include <cstring>
 
 #include <boost/config.hpp>
+#include <boost/swap.hpp>
 #include <boost/assert.hpp>
 #include <boost/detail/iterator.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -92,6 +93,10 @@ struct pod_dynamic_array {
     size_ = 0;
     capacity_ = 0;
     data_ = 0;
+  }
+  
+  void swap (pod_dynamic_array& other) {
+    boost::swap(*this, other);
   }
 
   void assign (pod_dynamic_array const& other) {
