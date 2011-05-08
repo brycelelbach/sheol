@@ -31,6 +31,7 @@ run dynamic_array/basics.cpp : : : : dynamic_array_basics ;
 run dynamic_array/comparisons.cpp : : : : dynamic_array_comparisons ; 
 run dynamic_array/copy.cpp : : : : dynamic_array_copy ;
 run dynamic_array/podness.cpp : : : : dynamic_array_podness ;
+run dynamic_array/stress.cpp : : : : dynamic_array_stress ;
 
 run tagged_ptr/basics.cpp : : : : tagged_ptr_basics ;
 run tagged_ptr/comparisons.cpp : : : : tagged_ptr_comparisons ;
