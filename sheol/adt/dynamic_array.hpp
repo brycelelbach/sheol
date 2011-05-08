@@ -17,7 +17,7 @@ template <typename T, std::size_t Initial = 8,
           typename Alloc = std::allocator<T>,
           typename GrowthPolicy = power_growth_policy<2>::apply<T> >
 struct dynamic_array: pod_dynamic_array<T, Initial, Alloc, GrowthPolicy> {
-  typedef pod_tagged_ptr<T> base_type;
+  typedef pod_dynamic_array<T> base_type;
 
  private:
   // Adjust method access.
@@ -28,7 +28,6 @@ struct dynamic_array: pod_dynamic_array<T, Initial, Alloc, GrowthPolicy> {
   // Adjust data access;
   using base_type::size_;
   using base_type::capacity_;
-  using base_type::alloc_;
   using base_type::gp_;
   using base_type::data_;
 

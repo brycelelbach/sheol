@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/detail/iterator.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/utility/result_of.hpp>
 #include <boost/spirit/home/support/container.hpp>
 
 #include <sheol/config.hpp>
@@ -56,14 +57,12 @@ struct pod_dynamic_array {
     BOOST_ASSERT(init != 0);
     size_ = 0;
     capacity_ = init;
-    alloc_ = Alloc();
-    data_ = alloc_.allocate(init);
+    data_ = Alloc().allocate(init);
   }
 
-  void construct (dynamic_array const& other) {
+  void construct (pod_dynamic_array const& other) {
     size_ = 0;
     capacity_ = 0;
-    alloc_ = Alloc();
     data_ = 0;
     copy(other.begin(), other.end());
   }
@@ -74,7 +73,6 @@ struct pod_dynamic_array {
   >::type construct (Container const& c) {
     size_ = 0;
     capacity_ = 0;
-    alloc_ = Alloc();
     data_ = 0;
     copy(c.begin(), c.end());
   }
@@ -83,7 +81,6 @@ struct pod_dynamic_array {
   void construct (Iterator first, Iterator last) {
     size_ = 0;
     capacity_ = 0;
-    alloc_ = Alloc();
     data_ = 0;
     copy(first, last);
   }
@@ -91,13 +88,13 @@ struct pod_dynamic_array {
   void destroy (void) {
     clear();
     if (data_ && (capacity_ != 0))
-      alloc_.deallocate(data_, capacity_);
+      Alloc().deallocate(data_, capacity_);
     size_ = 0;
     capacity_ = 0;
     data_ = 0;
   }
 
-  void assign (dynamic_array const& other) {
+  void assign (pod_dynamic_array const& other) {
     if (*this != other)
       copy(other.begin(), other.end());
   }
@@ -115,18 +112,18 @@ struct pod_dynamic_array {
   }
 
   size_type size (void) const
-  { return size_ }
+  { return size_; }
 
   size_type capacity (void) const
   { return capacity_; }
 
   bool empty (void) const
-  { return size_ == 0 }
+  { return size_ == 0; }
 
   void clear (void) {
     if (data_ && (size_ != 0)) {
       for (size_type i = 0; i < size_; ++i)
-        alloc_.destroy(&data_[i]);
+        Alloc().destroy(&data_[i]);
       size_ = 0;  
     }
   }
@@ -134,30 +131,30 @@ struct pod_dynamic_array {
   void push_back (T const& val) {
     if (size_ == capacity_) {
       typename boost::result_of<GrowthPolicy(size_type, size_type)>::type
-        new_capacity = gp_(capacity_, size_); 
+        new_capacity = gp_(capacity_, size_);  
   
       // allocate the new block
-      T* new_data = alloc_.allocate(new_capacity); 
+      T* new_data = Alloc().allocate(new_capacity); 
   
       // copy the old data
       std::memcpy(new_data, data_, size_ * sizeof(T)); 
   
       // destroy and deallocate old data  
       for (size_type i = 0; i < size_; ++i)
-        alloc_.destroy(&data_[i]);
+        Alloc().destroy(&data_[i]);
       if (capacity_)
-        alloc_.deallocate(data_, capacity_);
+        Alloc().deallocate(data_, capacity_);
   
       data_ = new_data;
       capacity_ = new_capacity;
     }
   
-    alloc_.construct(&data_[size_], val);
+    Alloc().construct(&data_[size_], val);
     size_ += 1;
   }
  
   void pop_back (void) {
-    alloc_.destroy(&data_[size_ - 1]);
+    Alloc().destroy(&data_[size_ - 1]);
     size_ -= 1;
   }
 
@@ -217,9 +214,9 @@ struct pod_dynamic_array {
     return data_[i];
   }
 
-  void reserve (size_typei ) {
+  void reserve (size_type s) {
     if (capacity_ != s) {
-      T* new_data = alloc_.allocate(s); // allocate the new block
+      T* new_data = Alloc().allocate(s); // allocate the new block
   
       if (size_) {
         if (size_ > s)
@@ -230,11 +227,11 @@ struct pod_dynamic_array {
   
       // destroy and deallocate old data  
       for (size_type i = 0; i < size_; ++i) {
-        alloc_.destroy(&data_[i]);
+        Alloc().destroy(&data_[i]);
       }
   
       if (capacity_)
-        alloc_.deallocate(data_, capacity_);
+        Alloc().deallocate(data_, capacity_);
   
       if (size_ > s)
         size_ = s;
@@ -267,24 +264,23 @@ struct pod_dynamic_array {
     // deallocate the old data and reallocate a big enough array
     if (dist > capacity_) {
       if (data_ && (capacity_ != 0))
-        alloc_.deallocate(data_, capacity_);
+        Alloc().deallocate(data_, capacity_);
   
       // figure out how large we need the array to be
       while (dist > capacity_)
-        capacity_ = gp_(capacity_, 0);
+        capacity_ = gp_(capacity_, size_type(0));
   
       // allocate it
-      data_ = alloc_.allocate(capacity_);
+      data_ = Alloc().allocate(capacity_);
     }
   
     for (size_ = 0; first != last; ++first, ++size_) {
-      alloc_.construct(&data_[size_], *first);
+      Alloc().construct(&data_[size_], *first);
     }
   }
 
   size_type size_;
   size_type capacity_;
-  Alloc alloc_;
   GrowthPolicy gp_;
   T* data_;
 };

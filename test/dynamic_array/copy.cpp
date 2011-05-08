@@ -17,31 +17,31 @@ int main (void) {
   a0.push_back(1);
   a0.push_back(2);
   a0.push_back(3);
-  BOOST_TEST_EQ(a0.size(), 3U);
-  BOOST_TEST_EQ(a1.size(), 0U);
+  SHEOL_TEST_EQ(a0.size(), 3U);
+  SHEOL_TEST_EQ(a1.size(), 0U);
 
   // copy
   a1 = a0;
-  BOOST_TEST_EQ(a0.size(), 3U);
-  BOOST_TEST_EQ(a1.size(), 3U);
+  SHEOL_TEST_EQ(a0.size(), 3U);
+  SHEOL_TEST_EQ(a1.size(), 3U);
 
   // clear first
   a0.clear();
-  BOOST_TEST_EQ(a0.size(), 0U);
-  BOOST_TEST_EQ(a1.size(), 3U);
+  SHEOL_TEST_EQ(a0.size(), 0U);
+  SHEOL_TEST_EQ(a1.size(), 3U);
 
   // lookup
-  BOOST_TEST_EQ(a1[0], 1);
-  BOOST_TEST_EQ(a1[1], 2);
-  BOOST_TEST_EQ(a1[2], 3);
+  SHEOL_TEST_EQ(a1[0], 1);
+  SHEOL_TEST_EQ(a1[1], 2);
+  SHEOL_TEST_EQ(a1[2], 3);
 
   // removal
   a1.pop_back();
   a1.pop_back();
   a1.pop_back();
-  BOOST_TEST_EQ(a0.size(), 0U);
-  BOOST_TEST_EQ(a1.size(), 0U);
+  SHEOL_TEST_EQ(a0.size(), 0U);
+  SHEOL_TEST_EQ(a1.size(), 0U);
 
-  return boost::report_errors();
+  return sheol::report_errors();
 }
 
