@@ -8,8 +8,9 @@
 #if !defined(SHEOL_A173DAC1_868C_4CD5_B4F0_CEAF63640D16)
 #define SHEOL_A173DAC1_868C_4CD5_B4F0_CEAF63640D16
 
-#include <cstddef>
+#include <sheol/config.hpp>
 
+#include <sstream>
 #include <iostream>
 
 #include <boost/assert.hpp>
@@ -75,6 +76,32 @@ struct fixture {
         << file << "(" << line << "): "
         << msg << " failed in function '"
         << function << "'" << std::endl;
+      increment(c);
+      return false;
+    }
+    return true;
+  }
+
+  template <typename T, typename U>
+  bool check_str_equal(char const* file, int line, char const* function,
+                       counter_type c, T const& t, U const& u, char const* msg)
+  {
+    std::ostringstream oss;
+
+    oss.str("");
+    oss << t;
+    std::string t_str = oss.str();
+
+    oss.str("");
+    oss << u;
+    std::string u_str = oss.str();
+
+    if (!(t_str == u_str)) {
+      mutex_type::scoped_lock l(mutex_);
+      stream_ 
+        << file << "(" << line << "): " << msg  
+        << " failed in function '" << function << "': "
+        << "'" << t_str << "' != '" << u_str << "'" << std::endl;
       increment(c);
       return false;
     }
@@ -183,6 +210,14 @@ inline int report_errors() {
      expr, msg)                                                         \
   /***/
 
+#define SHEOL_TEST_STREQ(expr1, expr2)                                  \
+  ::sheol::global_fixture.check_str_equal                               \
+    (__FILE__, __LINE__, BOOST_CURRENT_FUNCTION,                        \
+     ::sheol::counter_test,                                             \
+     expr1, expr2, "test '" BOOST_PP_STRINGIZE(expr1) " str== "         \
+                            BOOST_PP_STRINGIZE(expr2) "'")              \
+  /***/
+
 #define SHEOL_TEST_EQ(expr1, expr2)                                     \
   ::sheol::global_fixture.check_equal                                   \
     (__FILE__, __LINE__, BOOST_CURRENT_FUNCTION,                        \
@@ -234,6 +269,14 @@ inline int report_errors() {
     (__FILE__, __LINE__, BOOST_CURRENT_FUNCTION,                        \
      ::sheol::counter_sanity,                                           \
      expr, msg)                                                         \
+  /***/
+
+#define SHEOL_SANITY_STREQ(expr1, expr2)                                \
+  ::sheol::global_fixture.check_str_equal                               \
+    (__FILE__, __LINE__, BOOST_CURRENT_FUNCTION,                        \
+     ::sheol::counter_sanity,                                           \
+     expr1, expr2, "sanity check '" BOOST_PP_STRINGIZE(expr1) " str== " \
+                                    BOOST_PP_STRINGIZE(expr2) "'")      \
   /***/
 
 #define SHEOL_SANITY_EQ(expr1, expr2)                                   \
