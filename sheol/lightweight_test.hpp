@@ -86,15 +86,12 @@ struct fixture {
   bool check_str_equal(char const* file, int line, char const* function,
                        counter_type c, T const& t, U const& u, char const* msg)
   {
-    std::ostringstream oss;
+    std::ostringstream oss1, oss2;
+    oss1 << t;
+    std::string t_str = oss1.str();
 
-    oss.str("");
-    oss << t;
-    std::string t_str = oss.str();
-
-    oss.str("");
-    oss << u;
-    std::string u_str = oss.str();
+    oss2 << u;
+    std::string u_str = oss2.str();
 
     if (!(t_str == u_str)) {
       mutex_type::scoped_lock l(mutex_);
