@@ -30,6 +30,7 @@ int main (void) {
     a.pop_back();
     a.pop_back();
     SHEOL_TEST_EQ(a.size(), 0U);
+    SHEOL_TEST(a.empty());
   }
   
   { 
@@ -53,6 +54,7 @@ int main (void) {
     // removal
     a.clear();
     SHEOL_TEST_EQ(a.size(), 0U);
+    SHEOL_TEST(a.empty());
   }
 
   return sheol::report_errors();

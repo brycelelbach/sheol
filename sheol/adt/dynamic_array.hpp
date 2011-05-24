@@ -48,9 +48,8 @@ struct dynamic_array: pod_dynamic_array<T, Initial, Alloc, GrowthPolicy> {
   dynamic_array (Iterator first, Iterator last)
   { base_type::construct(first, last); }
 
-  ~dynamic_array (void) {
-    base_type::destroy();
-  }
+  ~dynamic_array (void)
+  { base_type::destroy(); }
 
   dynamic_array& operator= (dynamic_array const& other) {
     base_type::copy(other.begin(), other.end());

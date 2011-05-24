@@ -8,7 +8,7 @@
 project ;
 
 run freelist/one_size_free_entry/constants.cpp : : : : osfe_constants ; 
-run freelist/one_size_free_entry/basics.cpp : : : : osfe_basics ; 
+run freelist/one_size_free_entry/basic.cpp : : : : osfe_basic ; 
 run freelist/one_size_free_entry/comparisons.cpp : : : : osfe_comparisons ; 
 run freelist/one_size_free_entry/podness.cpp : : : : osfe_podness ;
 compile-fail freelist/one_size_free_entry/type_is_too_small.cpp : : osfe_type_is_too_small ;
@@ -18,7 +18,7 @@ compile-fail freelist/one_size_free_entry/no_const_ref_copy_ctor.cpp : : osfe_no
 compile-fail freelist/one_size_free_entry/no_temp_copy_assignment.cpp : : osfe_no_temp_copy_assignment ;
 
 run freelist/variable_size_free_entry/constants.cpp : : : : vsfe_constants ; 
-run freelist/variable_size_free_entry/basics.cpp : : : : vsfe_basics ; 
+run freelist/variable_size_free_entry/basic.cpp : : : : vsfe_basic ; 
 run freelist/variable_size_free_entry/comparisons.cpp : : : : vsfe_comparisons ; 
 run freelist/variable_size_free_entry/podness.cpp : : : : vsfe_podness ;
 compile-fail freelist/variable_size_free_entry/type_is_too_small.cpp : : vsfe_type_is_too_small ;
@@ -27,15 +27,16 @@ compile-fail freelist/variable_size_free_entry/no_const_ref_copy_assignment.cpp 
 compile-fail freelist/variable_size_free_entry/no_const_ref_copy_ctor.cpp : : vsfe_no_const_ref_copy_ctor ;
 compile-fail freelist/variable_size_free_entry/no_temp_copy_assignment.cpp : : vsfe_no_temp_copy_assignment ;
 
-run dynamic_array/basics.cpp : : : : dynamic_array_basics ;
+run dynamic_array/basic.cpp : : : : dynamic_array_basic ;
 run dynamic_array/comparisons.cpp : : : : dynamic_array_comparisons ; 
 run dynamic_array/copy.cpp : : : : dynamic_array_copy ;
 run dynamic_array/podness.cpp : : : : dynamic_array_podness ;
 run dynamic_array/stress.cpp : : : : dynamic_array_stress ;
 
 run doubly_linked_list/podness.cpp : : : : doubly_linked_list_podness ;
+run doubly_linked_list/basic.cpp : : : : doubly_linked_list_basic ;
 
-run tagged_ptr/basics.cpp : : : : tagged_ptr_basics ;
+run tagged_ptr/basic.cpp : : : : tagged_ptr_basic ;
 run tagged_ptr/comparisons.cpp : : : : tagged_ptr_comparisons ;
 run tagged_ptr/podness.cpp : : : : tagged_ptr_podness ;
 compile-fail tagged_ptr/no_const_ref_copy_assignment.cpp : : tagged_ptr_no_const_ref_copy_assignment ;

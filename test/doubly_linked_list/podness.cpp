@@ -6,16 +6,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <sheol/lightweight_test.hpp>
-//#include <sheol/adt/doubly_linked_list.hpp>
-#include <sheol/adt/pod_doubly_linked_list.hpp>
+#include <sheol/adt/doubly_linked_list.hpp>
 
 #include <boost/type_traits/is_pod.hpp>
 
-//using sheol::adt::doubly_linked_list;
+using sheol::adt::doubly_linked_list;
 using sheol::adt::pod_doubly_linked_list;
 
 int main (void) {
-//  SHEOL_TEST(!boost::is_pod<doubly_linked_list<int> >::value);
+  SHEOL_TEST(!boost::is_pod<doubly_linked_list<int> >::value);
   SHEOL_TEST(boost::is_pod<pod_doubly_linked_list<int> >::value);
 
   return sheol::report_errors();

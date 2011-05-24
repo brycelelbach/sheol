@@ -23,12 +23,6 @@
 #include <sheol/config.hpp>
 #include <sheol/adt/policy/power_growth_policy.hpp>
 
-#if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
-  #include <boost/mpl/not.hpp>
-  #include <boost/type_traits/is_polymorphic.hpp>
-  #include <sheol/compile_time_assert.hpp> 
-#endif
-
 namespace sheol {
 namespace adt {
 
@@ -36,12 +30,6 @@ template <typename T, std::size_t Initial = 8,
           typename Alloc = std::allocator<T>,
           typename GrowthPolicy = power_growth_policy<2>::apply<T> >
 struct pod_dynamic_array {
-  #if !defined(SHEOL_NO_POLYMORPHIC_PROTECTION)
-    SHEOL_COMPILE_TIME_ASSERT(
-      boost::mpl::not_<boost::is_polymorphic<T> >::value,
-      type_is_polymorphic, (T));
-  #endif
-
   typedef T value_type;
   typedef T& reference;
   typedef T const& const_reference;
