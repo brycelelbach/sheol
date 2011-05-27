@@ -27,6 +27,8 @@ compile-fail freelist/variable_size_free_entry/no_const_ref_copy_assignment.cpp 
 compile-fail freelist/variable_size_free_entry/no_const_ref_copy_ctor.cpp : : vsfe_no_const_ref_copy_ctor ;
 compile-fail freelist/variable_size_free_entry/no_temp_copy_assignment.cpp : : vsfe_no_temp_copy_assignment ;
 
+run freelist/one_size_freelist/basic.cpp : : : : osfl_basic ; 
+
 run dynamic_array/basic.cpp : : : : dynamic_array_basic ;
 run dynamic_array/comparisons.cpp : : : : dynamic_array_comparisons ; 
 run dynamic_array/copy.cpp : : : : dynamic_array_copy ;
