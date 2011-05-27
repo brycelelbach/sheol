@@ -26,8 +26,8 @@
 namespace sheol {
 namespace memory {
 
-template<std::size_t ObjectSize,
-         std::size_t Capacity = (1 << 8) * 0x1000 * ObjectSize,
+template<std::size_t ObjectSize, // bytes
+         std::size_t Capacity = (1 << 8) * 0x1000 * ObjectSize, // bytes
          std::size_t ID = ObjectSize>
 struct heapless_partition {
   SHEOL_COMPILE_TIME_ASSERT(
