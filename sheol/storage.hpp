@@ -14,7 +14,8 @@ namespace sheol {
 
 template <std::size_t Bytes>
 struct storage {
-  typedef boost::uint8_t type [Bytes]; 
+  typedef storage type;
+  boost::uint8_t data [Bytes]; 
 };
 
 } // sheol
