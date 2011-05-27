@@ -13,11 +13,13 @@
 
 #if defined(SHEOL_X86_64_ARCHITECTURE)
   #include <sheol/config.hpp>
-
+ 
   #include <stddef.h>
 
   #include <boost/config.hpp>
   #include <boost/cstdint.hpp>
+
+  #include <sheol/safe_bool.hpp>
 
   namespace sheol {
   namespace adt {
@@ -86,8 +88,11 @@
     T* operator-> (void) volatile
     { return get_ptr(); }
 
-    operator bool (void) const volatile
-    { return get_ptr() != 0; }
+    operator ::sheol::safe_bool<pod_tagged_ptr> (void) const volatile
+    { return ::sheol::safe_bool<pod_tagged_ptr>(get_ptr() != 0); }
+  
+    bool operator! (void) const volatile
+    { return get_ptr() == 0; }
     
     bool operator== (pod_tagged_ptr volatile const& rhs) const volatile
     { return (get_ptr() == rhs.get_ptr()) && (get_tag() == rhs.get_tag()); }

@@ -29,6 +29,7 @@
   #include <sheol/adt/pod_tagged_ptr.hpp>
 #endif
 
+#include <sheol/safe_bool.hpp>
 #include <sheol/compile_time_assert.hpp> 
 
 namespace sheol {
@@ -101,8 +102,11 @@ struct pod_variable_size_free_entry {
   bool operator!= (pod_variable_size_free_entry const& rhs) const
   { return !operator==(rhs); } 
     
-  operator bool (void) const
-  { return get() != 0; }
+  operator sheol::safe_bool<pod_variable_size_free_entry> (void) const
+  { return sheol::safe_bool<pod_variable_size_free_entry>(get() != 0); }
+
+  bool operator! (void) const
+  { return get() == 0; }
 };
 
 template <typename T>
@@ -174,8 +178,11 @@ struct pod_variable_size_free_entry<T, typename boost::enable_if<
   bool operator!= (pod_variable_size_free_entry const& rhs) const
   { return !operator==(rhs); } 
     
-  operator bool (void) const
-  { return get() != 0; }
+  operator sheol::safe_bool<pod_variable_size_free_entry> (void) const
+  { return sheol::safe_bool<pod_variable_size_free_entry>(get() != 0); }
+
+  bool operator! (void) const
+  { return get() == 0; }
 };
 
 #if defined(SHEOL_X86_64_ARCHITECTURE)
@@ -254,8 +261,10 @@ struct pod_variable_size_free_entry<T, typename boost::enable_if<
     bool operator!= (pod_variable_size_free_entry const& rhs) const
     { return !operator==(rhs); }
       
-    operator bool (void) const
-    { return data; }
+    SHEOL_OPERATOR_SAFE_BOOL(pod_variable_size_free_entry, data)
+  
+    bool operator! (void) const
+    { return !data; }
   };
 #endif
 

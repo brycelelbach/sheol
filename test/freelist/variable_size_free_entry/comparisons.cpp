@@ -17,22 +17,22 @@ void test (void) {
   vsfe_type first(reinterpret_cast<T*>(0xcede), 18U),
             second(reinterpret_cast<T*>(0xcede), 7U);
 
-  SHEOL_TEST_NEQ(first, second); 
+  SHEOL_TEST(first != second); 
 
   first.reset(reinterpret_cast<T*>(0xcede), 18U);
   second.reset(reinterpret_cast<T*>(0xceed), 18U);
 
-  SHEOL_TEST_NEQ(first, second); 
+  SHEOL_TEST(first != second); 
   
   first.reset(reinterpret_cast<T*>(0xcede), 21U);
   second.reset(reinterpret_cast<T*>(0xceed), 18U);
 
-  SHEOL_TEST_NEQ(first, second); 
+  SHEOL_TEST(first != second); 
   
   first.reset(reinterpret_cast<T*>(0xcede), 18U);
   second.reset(reinterpret_cast<T*>(0xcede), 18U);
 
-  SHEOL_TEST_EQ(first, second); 
+  SHEOL_TEST(first == second); 
 }
 
 int main (void) {

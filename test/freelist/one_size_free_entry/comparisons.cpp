@@ -17,12 +17,12 @@ void test (void) {
   osfe_type first(reinterpret_cast<T*>(0xcede)),
             second(reinterpret_cast<T*>(0xceed));
 
-  SHEOL_TEST_NEQ(first, second); 
+  SHEOL_TEST(first != second); 
 
   first.reset(reinterpret_cast<T*>(0xcede));
   second.reset(reinterpret_cast<T*>(0xcede));
 
-  SHEOL_TEST_EQ(first, second); 
+  SHEOL_TEST(first == second); 
 }
 
 int main (void) {

@@ -60,23 +60,6 @@ void test (void) {
     SHEOL_TEST_EQ(vsfe.retrieve(), reinterpret_cast<T*>(0xff));
     SHEOL_TEST_EQ(vsfe.size(), 8U);
   }
-  
-  {
-    vsfe_type first(reinterpret_cast<T*>(0xcede), 18U),
-              second(reinterpret_cast<T*>(0xcede), 7U);
-
-    SHEOL_TEST_NEQ(first, second); 
-
-    first.reset(reinterpret_cast<T*>(0xcede), 18U);
-    second.reset(reinterpret_cast<T*>(0xceed), 18U);
-
-    SHEOL_TEST_NEQ(first, second); 
-    
-    first.reset(reinterpret_cast<T*>(0xcede), 18U);
-    second.reset(reinterpret_cast<T*>(0xcede), 18U);
-
-    SHEOL_TEST_EQ(first, second); 
-  }
 
   {
     vsfe_type first, second, third;

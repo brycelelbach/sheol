@@ -23,28 +23,28 @@ int main (void) {
       tagged_ptr<int> i(&a, 0);
       tagged_ptr<int> j(&a, 1);
 
-      SHEOL_TEST_NEQ(i, j);
+      SHEOL_TEST(i != j);
     }
 
     {
       tagged_ptr<int> i(&a, 1);
       tagged_ptr<int> j(&b, 1);
 
-      SHEOL_TEST_NEQ(i, j);
+      SHEOL_TEST(i != j);
     }
 
     {
       tagged_ptr<int> i(&a, 1);
       tagged_ptr<int> j(&b, 0);
 
-      SHEOL_TEST_NEQ(i, j);
+      SHEOL_TEST(i != j);
     }
 
     {
       tagged_ptr<int> i(&a, 1);
       tagged_ptr<int> j(&a, 1);
 
-      SHEOL_TEST_EQ(i, j);
+      SHEOL_TEST(i == j);
     }
     
     {
