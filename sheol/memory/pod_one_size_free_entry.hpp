@@ -84,6 +84,14 @@ struct pod_one_size_free_entry {
   T* retrieve (void) 
   { return reinterpret_cast<T*>(get()); }
 
+  template <typename Y>  
+  Y const* retrieve (void) const
+  { return reinterpret_cast<Y const*>(get()); }
+  
+  template <typename Y>  
+  Y* retrieve (void) 
+  { return reinterpret_cast<Y*>(get()); }
+
   bool operator== (pod_one_size_free_entry const& rhs) const
   { return (get() == rhs.get()); }
 
