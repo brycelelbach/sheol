@@ -21,8 +21,8 @@ struct doubly_linked_list: pod_doubly_linked_list<T, Alloc> {
 
  private:
   // Adjust type access.
-  using base_type::node_type;
-  using base_type::allocator_type;
+  using typename base_type::node_type;
+  using typename base_type::allocator_type;
 
   // Adjust method access.
   using base_type::construct;

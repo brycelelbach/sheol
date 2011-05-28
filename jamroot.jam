@@ -16,7 +16,9 @@ project
     <toolset>gcc:<cxxflags>-fvisibility=hidden
     <toolset>gcc:<cxxflags>-ftemplate-depth-500
     <toolset>gcc:<cxxflags>-fdiagnostics-show-option
+    <toolset>gcc:<cxxflags>-Wattributes
     <toolset>clang:<cxxflags>-fdiagnostics-show-option
+    <define>SHEOL_SOURCE
     <warnings>on
     <include>$(SHEOL_ROOT)
     <include>$(BOOST_ROOT)

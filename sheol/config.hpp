@@ -11,6 +11,14 @@
 #include <sheol/config/branch_hints.hpp>
 #include <sheol/config/manual_profiling.hpp>
 #include <sheol/config/unused.hpp>
+#include <sheol/config/visibility.hpp>
+#include <sheol/config/inlining.hpp>
+
+#if defined(SHEOL_SOURCE)
+  #define SHEOL_EXPORT SHEOL_SYMBOL_EXPORT
+#else
+  #define SHEOL_EXPORT SHEOL_SYMBOL_IMPORT
+#endif
 
 // Including <cstddef> without C++0x support enabled offends GNU's standard
 // library. These using statements won't cause problems if <cstddef> is

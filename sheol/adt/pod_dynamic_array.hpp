@@ -8,6 +8,8 @@
 #if !defined(SHEOL_8F2F2234_B763_4A5D_A070_AE378D3E8E18)
 #define SHEOL_8F2F2234_B763_4A5D_A070_AE378D3E8E18
 
+#include <sheol/config.hpp>
+
 #include <memory>
 #include <algorithm>
 #include <cstring>
@@ -20,7 +22,6 @@
 #include <boost/utility/result_of.hpp>
 #include <boost/spirit/home/support/container.hpp>
 
-#include <sheol/config.hpp>
 #include <sheol/adt/policy/power_growth_policy.hpp>
 
 namespace sheol {
@@ -45,13 +46,7 @@ struct pod_dynamic_array {
 
   typedef GrowthPolicy growth_policy_type;
 
-  void construct (size_type init = Initial) {
-    // TODO: Make this an exception.
-    BOOST_ASSERT(init != 0);
-    size_ = 0;
-    capacity_ = init;
-    data_ = Alloc().allocate(init);
-  }
+  void SHEOL_NO_INLINE construct (size_type init = Initial);
 
   void construct (pod_dynamic_array const& other) {
     size_ = 0;
@@ -280,6 +275,18 @@ struct pod_dynamic_array {
   GrowthPolicy gp_;
   T* data_;
 };
+  
+template <typename T, std::size_t Initial, typename Alloc,  
+          typename GrowthPolicy>
+void
+pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::construct (size_type init) {
+  // TODO: Make this an exception.
+  BOOST_ASSERT(init != 0);
+  size_ = 0;
+  capacity_ = init;
+  data_ = Alloc().allocate(init);
+}
+
 
 } // adt
 } // sheol

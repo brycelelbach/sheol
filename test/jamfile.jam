@@ -7,6 +7,11 @@
 
 import testing ;
 
+project
+  : requirements
+    <toolset>gcc:<testing.launcher>"valgrind --memcheck:leak-check=yes --error-exitcode=1"
+  ;
+
 run freelist/one_size_free_entry/constants.cpp : : : : osfe_constants ; 
 run freelist/one_size_free_entry/basic.cpp : : : : osfe_basic ; 
 run freelist/one_size_free_entry/comparisons.cpp : : : : osfe_comparisons ; 

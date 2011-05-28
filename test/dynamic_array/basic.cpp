@@ -13,6 +13,7 @@ using sheol::adt::dynamic_array;
 int main (void) {
   { 
     dynamic_array<int> a;
+    SHEOL_TEST_EQ(a.capacity(), 8U);
 
     // insertion
     a.push_back(1);
@@ -35,9 +36,10 @@ int main (void) {
   
   { 
     dynamic_array<int> a;
+    SHEOL_TEST_EQ(a.capacity(), 8U);
 
     // insertion
-    for (dynamic_array<int>::size_type i = 0; i < 8; ++i)
+    for (int i = 0; i < 8; ++i)
       a.push_back(i + 1);
 
     SHEOL_TEST_EQ(a.size(), 8U);
@@ -48,7 +50,7 @@ int main (void) {
     SHEOL_TEST_EQ(a.capacity(), 16U);
 
     // lookup
-    for (dynamic_array<int>::size_type i = 0; i < 9; ++i)
+    for (int i = 0; i < 9; ++i)
       SHEOL_TEST_EQ(a[i], (i + 1));
 
     // removal

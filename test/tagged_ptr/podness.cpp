@@ -20,8 +20,10 @@
 
 int main (void) {
   #if defined(SHEOL_X86_64_ARCHITECTURE)
-    SHEOL_TEST(!boost::is_pod<tagged_ptr<int> >::value);
-    SHEOL_TEST(boost::is_pod<pod_tagged_ptr<int> >::value);
+//    SHEOL_TEST(!boost::is_pod<tagged_ptr<int> >::value);
+//    SHEOL_TEST(boost::is_pod<pod_tagged_ptr<int> >::value);
+    SHEOL_TEST(!__is_pod(tagged_ptr<int>));
+    SHEOL_TEST(__is_pod(pod_tagged_ptr<int>));
   #endif
 
   return sheol::report_errors();
