@@ -41,6 +41,10 @@ struct pod_dynamic_array {
   typedef T* iterator;
   typedef T const* const_iterator;
 
+  typedef Alloc allocator_type;
+
+  typedef GrowthPolicy growth_policy_type;
+
   void construct (size_type init = Initial) {
     // TODO: Make this an exception.
     BOOST_ASSERT(init != 0);

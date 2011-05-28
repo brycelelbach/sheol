@@ -9,6 +9,8 @@
 #if !defined(SHEOL_0701C127_B570_4CDC_8DC0_226B8A2E4035)
 #define SHEOL_0701C127_B570_4CDC_8DC0_226B8A2E4035
 
+#include <sheol/config.hpp>
+
 #include <limits.h>
 
 #include <boost/cstdint.hpp>
@@ -20,15 +22,15 @@
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/modulus.hpp>
 
+#include <sheol/unused.hpp>
 #include <sheol/compile_time_assert.hpp>
-#include <sheol/config.hpp>
 
 namespace sheol {
 namespace memory {
 
 template<std::size_t ObjectSize, // bytes
          std::size_t Capacity = (1 << 8) * 0x1000 * ObjectSize, // bytes
-         std::size_t ID = ObjectSize>
+         typename ID = sheol::unused_type>
 struct heapless_partition {
   SHEOL_COMPILE_TIME_ASSERT(
     (boost::mpl::less<
@@ -116,21 +118,21 @@ struct heapless_partition {
   static byte_type* next;
 };
 
-template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
+template<std::size_t ObjectSize, std::size_t Capacity, typename ID>
 typename heapless_partition<ObjectSize, Capacity, ID>::byte_type
 heapless_partition<ObjectSize, Capacity, ID>::buffer[Capacity];
 
-template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
+template<std::size_t ObjectSize, std::size_t Capacity, typename ID>
 typename heapless_partition<ObjectSize, Capacity, ID>::byte_type* const
 heapless_partition<ObjectSize, Capacity, ID>::first 
   = &heapless_partition<ObjectSize, Capacity, ID>::buffer[0];
 
-template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
+template<std::size_t ObjectSize, std::size_t Capacity, typename ID>
 typename heapless_partition<ObjectSize, Capacity, ID>::byte_type* const
 heapless_partition<ObjectSize, Capacity, ID>::end 
   = &heapless_partition<ObjectSize, Capacity, ID>::buffer[Capacity];
 
-template<std::size_t ObjectSize, std::size_t Capacity, std::size_t ID>
+template<std::size_t ObjectSize, std::size_t Capacity, typename ID>
 typename heapless_partition<ObjectSize, Capacity, ID>::byte_type*
 heapless_partition<ObjectSize, Capacity, ID>::next 
   = heapless_partition<ObjectSize, Capacity, ID>::first;

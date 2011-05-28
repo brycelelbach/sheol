@@ -15,15 +15,18 @@
 namespace sheol {
 namespace memory {
 
-template <std::size_t ObjectSize /* bytes */>
-struct one_size_freelist: pod_one_size_freelist<ObjectSize>, boost::noncopyable
+template <std::size_t ObjectSize /* bytes */,
+          typename Alloc = std::allocator<sheol::storage<ObjectSize> > >
+struct one_size_freelist: pod_one_size_freelist<ObjectSize, Alloc>
+                        , boost::noncopyable
 {
-  typedef pod_one_size_freelist<ObjectSize> base_type;
+  typedef pod_one_size_freelist<ObjectSize, Alloc> base_type;
 
  private:
   // Adjust access to data.
   using base_type::first;
   using base_type::last;
+  using base_type::size_;
 
   // Adjust access to methods.
   using base_type::construct;
@@ -35,7 +38,7 @@ struct one_size_freelist: pod_one_size_freelist<ObjectSize>, boost::noncopyable
   }
 
   ~one_size_freelist (void) {
-    base_type::destroy();
+    base_type::clear();
   }  
 };
 
