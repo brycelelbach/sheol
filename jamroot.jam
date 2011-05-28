@@ -6,20 +6,22 @@
 ################################################################################
 
 import os ;
-import testing ;
+import path ;
 
-local BOOST_ROOT = [ os.environ BOOST_ROOT ] ;
-
-use-project /boost : $(BOOST_ROOT) ;
+constant BOOST_ROOT : [ os.environ BOOST_ROOT ] ;
+constant SHEOL_ROOT : [ path.pwd ] ;
 
 project 
   : requirements
     <toolset>gcc:<cxxflags>-fvisibility=hidden
+    <toolset>gcc:<cxxflags>-ftemplate-depth-500
+    <toolset>gcc:<cxxflags>-fdiagnostics-show-option
+    <toolset>clang:<cxxflags>-fdiagnostics-show-option
     <warnings>on
-    <include>.
+    <include>$(SHEOL_ROOT)
     <include>$(BOOST_ROOT)
   : build-dir bin.v2
   ;
 
-build-project test ; 
+build-project $(SHEOL_ROOT)/test ; 
 

@@ -250,8 +250,7 @@ struct pod_dynamic_array {
 
   template <typename Iterator>
   void copy (Iterator first, Iterator last) {
-    typename boost::detail::iterator_traits<Iterator>::difference_type
-      dist = boost::detail::distance(first, last);
+    size_type dist = boost::detail::distance(first, last);
   
     clear();
   

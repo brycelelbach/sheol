@@ -5,7 +5,7 @@
 #   file BOOST_LICENSE_1_0.rst or copy at http://www.boost.org/LICENSE_1_0.txt)
 ################################################################################
 
-project ;
+import testing ;
 
 run freelist/one_size_free_entry/constants.cpp : : : : osfe_constants ; 
 run freelist/one_size_free_entry/basic.cpp : : : : osfe_basic ; 
