@@ -25,6 +25,10 @@
 #include <sheol/adt/policy/power_growth_policy.hpp>
 
 namespace sheol {
+
+struct fill_tag { };
+fill_tag const fill = { };
+
 namespace adt {
 
 template <typename T, std::size_t Initial = 8,
@@ -46,41 +50,21 @@ struct pod_dynamic_array {
 
   typedef GrowthPolicy growth_policy_type;
 
-  void SHEOL_NO_INLINE construct (size_type init = Initial);
+  void construct (size_type init = Initial) SHEOL_NO_INLINE;
+  
+  void construct (size_type init, fill_tag const&) SHEOL_NO_INLINE;
 
-  void construct (pod_dynamic_array const& other) {
-    size_ = 0;
-    capacity_ = 0;
-    data_ = 0;
-    copy(other.begin(), other.end());
-  }
-
+  void construct (pod_dynamic_array const& other) SHEOL_NO_INLINE;
+  
   template <typename Container>
   typename boost::enable_if<
     boost::spirit::traits::is_container<Container>
-  >::type construct (Container const& c) {
-    size_ = 0;
-    capacity_ = 0;
-    data_ = 0;
-    copy(c.begin(), c.end());
-  }
+  >::type construct (Container const& c) SHEOL_NO_INLINE;
 
   template <typename Iterator>
-  void construct (Iterator first, Iterator last) {
-    size_ = 0;
-    capacity_ = 0;
-    data_ = 0;
-    copy(first, last);
-  }
+  void construct (Iterator first, Iterator last) SHEOL_NO_INLINE;
 
-  void destroy (void) {
-    clear();
-    if (data_ && (capacity_ != 0))
-      Alloc().deallocate(data_, capacity_);
-    size_ = 0;
-    capacity_ = 0;
-    data_ = 0;
-  }
+  void destroy (void) SHEOL_NO_INLINE;
   
   void swap (pod_dynamic_array& other) {
     boost::swap(*this, other);
@@ -207,7 +191,10 @@ struct pod_dynamic_array {
   }
 
   void reserve (size_type s) {
-    if (capacity_ != s) {
+    if (0 == s)
+      clear();
+
+    else if (capacity_ != s) {
       T* new_data = Alloc().allocate(s); // allocate the new block
   
       if (size_) {
@@ -278,15 +265,75 @@ struct pod_dynamic_array {
   
 template <typename T, std::size_t Initial, typename Alloc,  
           typename GrowthPolicy>
-void
-pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::construct (size_type init) {
-  // TODO: Make this an exception.
-  BOOST_ASSERT(init != 0);
+void pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::
+construct (size_type init) {
   size_ = 0;
   capacity_ = init;
-  data_ = Alloc().allocate(init);
+  if (init != 0)
+    data_ = Alloc().allocate(init);
+  else
+    data_ = 0;
 }
 
+template <typename T, std::size_t Initial, typename Alloc,  
+          typename GrowthPolicy>
+void pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::
+construct (size_type init, fill_tag const&) {
+  size_ = 0;
+  capacity_ = init;
+  if (init != 0) {
+    data_ = Alloc().allocate(init);
+    for (size_type i = 0; i < init; ++i)
+      push_back(T());
+  }
+  else
+    data_ = 0;
+}
+
+template <typename T, std::size_t Initial, typename Alloc,  
+          typename GrowthPolicy>
+void pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::
+construct (pod_dynamic_array const& other) {
+  size_ = 0;
+  capacity_ = 0;
+  data_ = 0;
+  copy(other.begin(), other.end());
+}
+  
+template <typename T, std::size_t Initial, typename Alloc,  
+          typename GrowthPolicy>
+template <typename Container>
+typename boost::enable_if<
+  boost::spirit::traits::is_container<Container>
+>::type pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::
+construct (Container const& c) {
+  size_ = 0;
+  capacity_ = 0;
+  data_ = 0;
+  copy(c.begin(), c.end());
+}
+  
+template <typename T, std::size_t Initial, typename Alloc,  
+          typename GrowthPolicy>
+template <typename Iterator>
+void pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::
+construct (Iterator first, Iterator last) {
+  size_ = 0;
+  capacity_ = 0;
+  data_ = 0;
+  copy(first, last);
+}
+  
+template <typename T, std::size_t Initial, typename Alloc,  
+          typename GrowthPolicy>
+void pod_dynamic_array<T, Initial, Alloc, GrowthPolicy>::destroy (void) {
+  clear();
+  if (data_ && (capacity_ != 0))
+    Alloc().deallocate(data_, capacity_);
+  size_ = 0;
+  capacity_ = 0;
+  data_ = 0;
+}
 
 } // adt
 } // sheol

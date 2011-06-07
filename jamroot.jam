@@ -17,9 +17,10 @@ project
     <toolset>gcc:<cxxflags>-ftemplate-depth-500
     <toolset>gcc:<cxxflags>-fdiagnostics-show-option
     <toolset>gcc:<cxxflags>-Wattributes
+    <toolset>gcc:<cxxflags>-Wextra
     <toolset>clang:<cxxflags>-fdiagnostics-show-option
     <define>SHEOL_SOURCE
-    <warnings>on
+    <warnings>all
     <include>$(SHEOL_ROOT)
     <include>$(BOOST_ROOT)
   : build-dir bin.v2

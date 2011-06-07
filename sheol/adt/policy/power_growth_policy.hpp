@@ -20,7 +20,7 @@ struct power_growth_policy {
     typedef size_type result_type;
 
     template <typename Size>
-    result_type operator() (Size capacity, Size /*size*/) {
+    result_type operator() (Size capacity, Size size) {
       if (capacity != 0)
         return capacity * (Numerator / Denominator);
       else

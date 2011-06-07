@@ -35,6 +35,9 @@ struct dynamic_array: pod_dynamic_array<T, Initial, Alloc, GrowthPolicy> {
   dynamic_array (typename base_type::size_type init = Initial)
   { base_type::construct(init); }
 
+  dynamic_array (typename base_type::size_type init, fill_tag const& f)
+  { base_type::construct(init, f); }
+
   dynamic_array (dynamic_array const& other)
   { base_type::construct(other); }
 
